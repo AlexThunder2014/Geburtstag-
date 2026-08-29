@@ -179,11 +179,23 @@
     🕵️ Geheime Detektiv-Zentrale
 </footer>
 
- <div class="admin-access">
-    <button id="adminAccessButton">
+<div class="admin-access">
+    <button type="button" onclick="openAdmin()">
         ⚙️ Spielleiter
     </button>
-</div> 
+</div>
+
+<script>
+function openAdmin() {
+    const password = prompt("🔐 Admin-Passwort:");
+
+    if (password === "1234") {
+        window.location.href = "admin.html";
+    } else if (password !== null) {
+        alert("❌ Falsches Passwort!");
+    }
+}
+</script>
 
 <script src="app.js"></script>
 
