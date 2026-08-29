@@ -401,3 +401,18 @@ async function init() {
 
 
 init();
+
+const adminAccessButton =
+    document.getElementById("adminAccessButton");
+
+adminAccessButton.addEventListener("click", function () {
+
+    const password = prompt("🔐 Admin-Passwort:");
+
+    if (password === "DEIN_PASSWORT") {
+        window.location.href = "admin.html";
+    } else {
+        alert("❌ Falsches Passwort!");
+    }
+
+});
