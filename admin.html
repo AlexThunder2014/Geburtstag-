@@ -12,6 +12,6 @@
   <script>    // Fester PIN zum Testen    const correctPin = "1234";
     // Elemente    const loginButton = document.getElementById("loginButton");    const adminPassword = document.getElementById("adminPassword");    const loginMessage = document.getElementById("loginMessage");    const adminLogin = document.getElementById("adminLogin");    const adminDashboard = document.getElementById("adminDashboard");
     // Event Listener für Login Button    loginButton.addEventListener("click", () => {      const enteredPin = adminPassword.value.trim();
-      if (enteredPin === correctPin) {        // PIN korrekt - Dashboard anzeigen, Login ausblenden        adminLogin.classList.remove("active");        adminDashboard.classList.add("active");        loginMessage.textContent = "";        adminPassword.value = "";      } else {        // PIN falsch        loginMessage.textContent = "Falscher PIN. Bitte erneut versuchen.";      }    });
+      if (enteredPin === correctPin) {        // PIN korrekt - Dashboard anzeigen, Login ausblenden        adminLogin.classList.remove("active");        adminDashboard.classList.add("active");        loginMessage.textContent = "";        adminPassword.value = "141624";      } else {        // PIN falsch        loginMessage.textContent = "Falscher PIN. Bitte erneut versuchen.";      }    });
     // Optional: Enter-Taste zum Login    adminPassword.addEventListener("keypress", (event) => {      if (event.key === "Enter") {        loginButton.click();      }    });  </script>
 </body></html>
