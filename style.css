@@ -1,0 +1,484 @@
+/* =========================================
+   DETEKTIV-JAGD
+   style.css
+   ========================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #070b14;
+    --bg2: #0d1424;
+    --card: rgba(255, 255, 255, 0.07);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text: #f4f7ff;
+    --muted: #9ca8bd;
+    --accent: #5ee7ff;
+    --accent2: #8b5cf6;
+    --success: #4ade80;
+    --danger: #fb7185;
+}
+
+body {
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at 20% 10%, rgba(94, 231, 255, 0.12), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.14), transparent 30%),
+        linear-gradient(135deg, var(--bg), var(--bg2));
+
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* =========================================
+   TOPBAR
+   ========================================= */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    min-height: 70px;
+    padding: 15px 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: rgba(7, 11, 20, 0.82);
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid var(--card-border);
+}
+
+.logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.team {
+    color: var(--muted);
+}
+
+.team strong {
+    color: var(--accent);
+}
+
+
+/* =========================================
+   MAIN
+   ========================================= */
+
+main {
+    width: 100%;
+    max-width: 900px;
+
+    margin: 0 auto;
+    padding: 35px 20px 60px;
+}
+
+
+/* =========================================
+   SCREENS
+   ========================================= */
+
+.screen {
+    display: none;
+}
+
+.screen.active {
+    display: block;
+}
+
+
+/* =========================================
+   CARDS
+   ========================================= */
+
+.card {
+    margin-bottom: 22px;
+    padding: 28px;
+
+    background: var(--card);
+
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
+
+    backdrop-filter: blur(20px);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+
+    animation: cardAppear 0.45s ease;
+}
+
+.hero-card {
+    text-align: center;
+    padding: 55px 30px;
+}
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================
+   ICONS
+   ========================================= */
+
+.big-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+
+    filter: drop-shadow(0 0 25px rgba(94, 231, 255, 0.35));
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+
+/* =========================================
+   TEXT
+   ========================================= */
+
+h1 {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+    margin-bottom: 15px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.small-label {
+    display: block;
+
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+
+    margin-bottom: 6px;
+}
+
+
+/* =========================================
+   INPUT
+   ========================================= */
+
+input {
+    width: 100%;
+
+    margin-top: 18px;
+    padding: 16px 18px;
+
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+
+    background: rgba(0, 0, 0, 0.3);
+
+    color: white;
+    font-size: 1rem;
+
+    outline: none;
+
+    transition:
+        border 0.2s,
+        box-shadow 0.2s;
+}
+
+input::placeholder {
+    color: #718096;
+}
+
+input:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px rgba(94, 231, 255, 0.12);
+}
+
+
+/* =========================================
+   BUTTON
+   ========================================= */
+
+.main-button {
+    width: 100%;
+
+    margin-top: 16px;
+    padding: 16px 20px;
+
+    border: none;
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        var(--accent),
+        var(--accent2)
+    );
+
+    color: white;
+
+    font-size: 1rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        filter 0.2s;
+}
+
+.main-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 30px rgba(94, 231, 255, 0.2);
+
+    filter: brightness(1.1);
+}
+
+.main-button:active {
+    transform: scale(0.98);
+}
+
+
+/* =========================================
+   MISSION HEADER
+   ========================================= */
+
+.mission-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 22px;
+}
+
+.station-number {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        var(--accent),
+        var(--accent2)
+    );
+
+    font-size: 1.4rem;
+    font-weight: 900;
+
+    box-shadow:
+        0 0 30px rgba(94, 231, 255, 0.25);
+}
+
+
+/* =========================================
+   CLUE
+   ========================================= */
+
+.clue-card {
+    border-color: rgba(94, 231, 255, 0.25);
+}
+
+#clueText {
+    font-size: 1.15rem;
+    color: white;
+}
+
+
+/* =========================================
+   ANSWER MESSAGE
+   ========================================= */
+
+.message {
+    display: none;
+
+    margin-top: 15px;
+    padding: 14px;
+
+    border-radius: 12px;
+
+    text-align: center;
+    font-weight: bold;
+}
+
+.message.success {
+    display: block;
+
+    background: rgba(74, 222, 128, 0.12);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+
+    color: var(--success);
+}
+
+.message.error {
+    display: block;
+
+    background: rgba(251, 113, 133, 0.12);
+    border: 1px solid rgba(251, 113, 133, 0.3);
+
+    color: var(--danger);
+}
+
+
+/* =========================================
+   MAP
+   ========================================= */
+
+#map {
+    min-height: 250px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 15px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(94, 231, 255, 0.06),
+            rgba(139, 92, 246, 0.08)
+        );
+
+    border: 1px solid var(--card-border);
+
+    color: var(--muted);
+}
+
+
+/* =========================================
+   WAITING SCREEN
+   ========================================= */
+
+.waiting-animation {
+    margin-top: 30px;
+
+    font-size: 3rem;
+
+    animation: detectiveFloat 2s ease-in-out infinite;
+}
+
+@keyframes detectiveFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-12px);
+    }
+}
+
+
+/* =========================================
+   FINAL
+   ========================================= */
+
+.final-message {
+    margin-top: 25px;
+
+    padding: 18px;
+
+    border-radius: 15px;
+
+    background: rgba(74, 222, 128, 0.1);
+
+    border: 1px solid rgba(74, 222, 128, 0.25);
+
+    color: var(--success);
+
+    font-weight: bold;
+}
+
+
+/* =========================================
+   FOOTER
+   ========================================= */
+
+footer {
+    padding: 25px;
+
+    text-align: center;
+
+    color: #667085;
+    font-size: 0.85rem;
+}
+
+
+/* =========================================
+   MOBILE
+   ========================================= */
+
+@media (max-width: 600px) {
+
+    .topbar {
+        padding: 13px 16px;
+    }
+
+    .logo {
+        font-size: 0.95rem;
+    }
+
+    .team {
+        font-size: 0.8rem;
+    }
+
+    main {
+        padding: 25px 14px 50px;
+    }
+
+    .card {
+        padding: 22px 18px;
+        border-radius: 20px;
+    }
+
+    .hero-card {
+        padding: 40px 20px;
+    }
+
+    .big-icon {
+        font-size: 4rem;
+    }
+
+    .mission-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .station-number {
+        width: 48px;
+        height: 48px;
+        font-size: 1.1rem;
+    }
+}
