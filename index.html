@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>🕵️ Detektiv-Jagd</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="logo">🕵️ DETEKTIV-JAGD</div>
+
+    <div class="team">
+        Team: <strong id="teamName">---</strong>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- START -->
+    <section id="startScreen" class="screen active">
+
+        <div class="card hero-card">
+
+            <div class="big-icon">🔎</div>
+
+            <h1>Willkommen, Detektive!</h1>
+
+            <p>
+                Gebt euren Teamnamen ein und startet eure geheime Mission.
+            </p>
+
+            <input
+                id="teamInput"
+                type="text"
+                placeholder="Euer Teamname"
+                maxlength="30"
+            >
+
+            <button id="startButton" class="main-button">
+                🚀 Mission starten
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- MISSION -->
+    <section id="missionScreen" class="screen">
+
+        <div class="mission-header">
+
+            <div>
+                <span class="small-label">AKTUELLE MISSION</span>
+                <h2 id="missionTitle">Station 1</h2>
+            </div>
+
+            <div class="station-number">
+                <span id="stationNumber">1</span>
+            </div>
+
+        </div>
+
+
+        <!-- HINWEIS -->
+        <div class="card clue-card">
+
+            <div class="card-icon">📜</div>
+
+            <h2>Geheimer Hinweis</h2>
+
+            <p id="clueText">
+                Lade Hinweis...
+            </p>
+
+        </div>
+
+
+        <!-- AUFGABE -->
+        <div class="card">
+
+            <div class="card-icon">🧩</div>
+
+            <h2>Was ist die Lösung?</h2>
+
+            <p id="taskText">
+                ---
+            </p>
+
+            <input
+                id="answerInput"
+                type="text"
+                placeholder="Lösung eingeben..."
+                autocomplete="off"
+            >
+
+            <button id="answerButton" class="main-button">
+                🔓 Lösung prüfen
+            </button>
+
+            <div id="answerMessage" class="message"></div>
+
+        </div>
+
+
+        <!-- KARTE -->
+        <div class="card">
+
+            <div class="card-icon">🗺️</div>
+
+            <h2>Detektiv-Karte</h2>
+
+            <div id="map">
+                Karte wird später hier angezeigt.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- WARTEN -->
+    <section id="waitingScreen" class="screen">
+
+        <div class="card hero-card">
+
+            <div class="big-icon">⏳</div>
+
+            <h1>Gut gemacht!</h1>
+
+            <p>
+                Eure Lösung wurde übermittelt.
+            </p>
+
+            <p>
+                Wartet auf den nächsten Hinweis von eurem Detektiv-Leiter.
+            </p>
+
+            <div class="waiting-animation">
+                🔎
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ENDE -->
+    <section id="finishScreen" class="screen">
+
+        <div class="card hero-card">
+
+            <div class="big-icon">🏆</div>
+
+            <h1>MISSION ERFÜLLT!</h1>
+
+            <p>
+                Ihr habt den Fall gelöst!
+            </p>
+
+            <div class="final-message">
+                🎉 Herzlichen Glückwunsch, Detektive! 🎉
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+    🕵️ Geheime Detektiv-Zentrale
+</footer>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
