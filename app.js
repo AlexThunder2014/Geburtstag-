@@ -1,7 +1,6 @@
 /* =========================================
    DETEKTIV-JAGD
    app.js
-   Kinderbereich
    ========================================= */
 
 let missions = [];
@@ -35,17 +34,30 @@ const answerMessage = document.getElementById("answerMessage");
 
 
 /* =========================================
-   HILFSFUNKTION
+   BILDSCHIRM WECHSELN
    ========================================= */
 
 function showScreen(screen) {
 
-    startScreen.classList.remove("active");
-    missionScreen.classList.remove("active");
-    waitingScreen.classList.remove("active");
-    finishScreen.classList.remove("active");
+    if (startScreen) {
+        startScreen.classList.remove("active");
+    }
 
-    screen.classList.add("active");
+    if (missionScreen) {
+        missionScreen.classList.remove("active");
+    }
+
+    if (waitingScreen) {
+        waitingScreen.classList.remove("active");
+    }
+
+    if (finishScreen) {
+        finishScreen.classList.remove("active");
+    }
+
+    if (screen) {
+        screen.classList.add("active");
+    }
 }
 
 
@@ -65,33 +77,43 @@ async function loadMissions() {
 
         missions = await response.json();
 
-        console.log("Missionen geladen:", missions);
+        console.log("✅ Missionen geladen:", missions);
 
     } catch (error) {
 
-        console.error(error);
+        console.error("❌ Fehler:", error);
 
-        clueText.textContent =
-            "Die Missionen konnten nicht geladen werden.";
+        if (clueText) {
+            clueText.textContent =
+                "Die Missionen konnten nicht geladen werden.";
+        }
 
     }
 }
 
 
 /* =========================================
-   TEAM STARTET
+   SPIEL STARTEN
    ========================================= */
 
-startButton.addEventListener("click", startGame);
+if (startButton) {
+
+    startButton.addEventListener("click", startGame);
+
+}
 
 
-teamInput.addEventListener("keydown", function(event) {
+if (teamInput) {
 
-    if (event.key === "Enter") {
-        startGame();
-    }
+    teamInput.addEventListener("keydown", function(event) {
 
-});
+        if (event.key === "Enter") {
+            startGame();
+        }
+
+    });
+
+}
 
 
 function startGame() {
@@ -100,6 +122,8 @@ function startGame() {
 
     if (!name) {
 
+        alert("🔎 Bitte gebt zuerst euren Teamnamen ein.");
+
         teamInput.focus();
 
         return;
@@ -107,9 +131,7 @@ function startGame() {
 
     if (missions.length === 0) {
 
-        alert(
-            "Die Missionen sind noch nicht geladen."
-        );
+        alert("Die Missionen sind noch nicht geladen.");
 
         return;
     }
@@ -130,8 +152,9 @@ function startGame() {
         currentMission
     );
 
-    showMission();
+    localStorage.removeItem("detektivFinished");
 
+    showMission();
 }
 
 
@@ -172,30 +195,37 @@ function showMission() {
     answerMessage.textContent = "";
 
     showScreen(missionScreen);
-
 }
 
 
 /* =========================================
-   LÖSUNG PRÜFEN
+   ANTWORT PRÜFEN
    ========================================= */
 
-answerButton.addEventListener(
-    "click",
-    checkAnswer
-);
+if (answerButton) {
+
+    answerButton.addEventListener(
+        "click",
+        checkAnswer
+    );
+
+}
 
 
-answerInput.addEventListener(
-    "keydown",
-    function(event) {
+if (answerInput) {
 
-        if (event.key === "Enter") {
-            checkAnswer();
+    answerInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+                checkAnswer();
+            }
+
         }
+    );
 
-    }
-);
+}
 
 
 function checkAnswer() {
@@ -214,20 +244,16 @@ function checkAnswer() {
         return;
     }
 
-
     const mission =
         missions[currentMission];
-
 
     const correctAnswer =
         String(mission.answer)
             .trim()
             .toLowerCase();
 
-
     const playerAnswer =
-        answer
-            .toLowerCase();
+        answer.toLowerCase();
 
 
     if (playerAnswer === correctAnswer) {
@@ -236,15 +262,7 @@ function checkAnswer() {
             "message success";
 
         answerMessage.textContent =
-            "✅ Richtig! Der Hinweis wurde gelöst.";
-
-        /*
-         * Die nächste Station wird noch NICHT
-         * sofort angezeigt.
-         *
-         * Später entscheidet dein Admin-Gerät,
-         * wann der nächste Hinweis freigeschaltet wird.
-         */
+            "✅ Richtig!";
 
         localStorage.setItem(
             "detektivAnswer",
@@ -285,7 +303,7 @@ function checkAnswer() {
 
 
 /* =========================================
-   WARTEN
+   WARTESCHIRM
    ========================================= */
 
 function showWaitingScreen() {
@@ -316,7 +334,6 @@ function nextMission() {
     }
 
     showMission();
-
 }
 
 
@@ -332,12 +349,11 @@ function finishGame() {
     );
 
     showScreen(finishScreen);
-
 }
 
 
 /* =========================================
-   AUTOMATISCHEN STATUS LADEN
+   SPIELSTAND LADEN
    ========================================= */
 
 function restoreGame() {
@@ -362,11 +378,16 @@ function restoreGame() {
 
         teamName = savedTeam;
 
-        teamNameDisplay.textContent =
-            teamName;
+        if (teamNameDisplay) {
+            teamNameDisplay.textContent =
+                teamName;
+        }
 
-        teamInput.value =
-            teamName;
+        if (teamInput) {
+            teamInput.value =
+                teamName;
+        }
+
     }
 
 
@@ -401,18 +422,3 @@ async function init() {
 
 
 init();
-
-const adminAccessButton =
-    document.getElementById("adminAccessButton");
-
-adminAccessButton.addEventListener("click", function () {
-
-    const password = prompt("🔐 Admin-Passwort:");
-
-    if (password === "DEIN_PASSWORT") {
-        window.location.href = "admin.html";
-    } else {
-        alert("❌ Falsches Passwort!");
-    }
-
-});
