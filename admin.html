@@ -1,17 +1,149 @@
-<!DOCTYPE html><html lang="de"><head>  <meta charset="UTF-8" />  <meta name="viewport" content="width=device-width, initial-scale=1" />  <title>Admin Login</title>  <style>    /* Einfache Styles */    .screen { display: none; }    .screen.active { display: block; }    .message { color: red; margin-top: 10px; }  </style></head><body>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .admin-dashboard-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .admin-dashboard-header h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 15px;
+      padding: 10px 20px;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      text-decoration: none;
+      color: #333;
+    }
+
+    .back-button:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="logo">🕵️ DETEKTIV-JAGD</div>
+    <div class="team">Spielleiter-Bereich</div>
+  </header>
+
   <main>
-    <!-- LOGIN -->    <section id="adminLogin" class="screen active">      <div>        <input          type="password"          id="adminPassword"          placeholder="Geheimcode eingeben..."        >        <button class="main-button" id="loginButton">          🔒 Zentrale öffnen        </button>        <div id="loginMessage" class="message"></div>      </div>    </section>
-    <!-- DASHBOARD -->    <section id="adminDashboard" class="screen">      <div class="mission-header">        <div>          <span class="small-label">SPIELLEITER</span>          <h2>Detektiv-Leitstelle</h2>        </div>        <div class="station-number">👮‍♂️</div>      </div>
-      <!-- Status -->      <div class="card">        <div class="card-icon">📊</div>        <h2>Live-Status</h2>        <p>Hier siehst du den aktuellen Stand der Teams.</p>        <div id="teamStatus">          <div class="status-row">            <span>Team</span>            <strong id="adminTeamName">Noch kein Team</strong>          </div>          <div class="status-row">            <span>Station</span>            <strong id="adminStation">-</strong>          </div>          <div class="status-row">            <span>Letzte Antwort</span>            <strong id="adminAnswer">-</strong>          </div>          <div class="status-row">            <span>Status</span>            <strong id="adminAnswerStatus">⏳ Wartet</strong>          </div>        </div>      </div>
-      <!-- Aktuelle Mission -->      <div class="card">        <div class="card-icon">📜</div>        <h2>Aktuelle Mission</h2>        <p id="adminMissionTitle">Keine Mission geladen</p>        <p id="adminMissionClue">---</p>      </div>
-      <!-- Nächste Station -->      <div class="card">        <div class="card-icon">🚀</div>        <h2>Spielsteuerung</h2>        <p>Wenn das Team die Aufgabe gelöst hat, kannst du hier den nächsten Hinweis freischalten.</p>        <button class="main-button" id="nextMissionButton">🔒 Nächsten Hinweis freischalten</button>        <div id="adminActionMessage" class="message"></div>      </div>
-      <!-- Manuelle Nachricht -->      <div class="card">        <div class="card-icon">📢</div>        <h2>Nachricht an das Team</h2>        <p>Du kannst dem Team jederzeit eine Nachricht schicken.</p>        <input          type="text"          id="adminMessageInput"          placeholder="Nachricht eingeben..."          maxlength="200"        >        <button class="main-button" id="sendMessageButton">📡 Nachricht senden</button>        <div id="messageStatus" class="message"></div>      </div>
-      <!-- Spiel Beenden -->      <div class="card">        <div class="card-icon">🏆</div>        <h2>Mission beenden</h2>        <p>Damit kannst du die Schnitzeljagd abschließen.</p>        <button class="main-button" id="finishGameButton">🏆 Mission abschließen</button>      </div>    </section>
+    <div class="admin-dashboard-header">
+      <h1>🔐 Admin-Dashboard</h1>
+      <a href="index.html" class="back-button">← Zurück zum Spiel</a>
+    </div>
+
+    <!-- Status -->
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h2>Live-Status</h2>
+      <p>Hier siehst du den aktuellen Stand der Teams.</p>
+      <div id="teamStatus">
+        Keine Daten
+      </div>
+    </div>
+
+    <!-- Aktuelle Mission -->
+    <div class="card">
+      <div class="card-icon">📜</div>
+      <h2>Aktuelle Mission</h2>
+      <p id="adminMissionTitle">Keine Mission geladen</p>
+      <p id="adminMissionProgress">---</p>
+    </div>
+
+    <!-- Nächste Station -->
+    <div class="card">
+      <div class="card-icon">🚀</div>
+      <h2>Spielsteuerung</h2>
+      <p>Wenn das Team die Aufgabe gelöst hat, kannst du hier den nächsten Hinweis freigeben.</p>
+      <button class="main-button" onclick="adminNextMission()">
+        ✅ Nächste Mission freigeben
+      </button>
+    </div>
+
+    <!-- Manuelle Nachricht -->
+    <div class="card">
+      <div class="card-icon">📢</div>
+      <h2>Nachricht an das Team</h2>
+      <p>Du kannst dem Team jederzeit eine Nachricht schicken.</p>
+      <input
+        id="adminMessage"
+        type="text"
+        placeholder="Nachricht eingeben..."
+      />
+      <button class="main-button" onclick="sendMessage()">
+        📨 Nachricht senden
+      </button>
+    </div>
+
+    <!-- Spiel Beenden -->
+    <div class="card">
+      <div class="card-icon">🏆</div>
+      <h2>Mission beenden</h2>
+      <p>Damit kannst du die Schnitzeljagd abschließen.</p>
+      <button class="main-button" onclick="finishAdminGame()" style="background-color: #ff6b6b;">
+        🏁 Spiel beenden
+      </button>
+    </div>
+
   </main>
-  <footer>    🔐 Nur für den Spielleiter  </footer>
-  <script>    // Fester PIN zum Testen    const correctPin = "1234";
-    // Elemente    const loginButton = document.getElementById("loginButton");    const adminPassword = document.getElementById("adminPassword");    const loginMessage = document.getElementById("loginMessage");    const adminLogin = document.getElementById("adminLogin");    const adminDashboard = document.getElementById("adminDashboard");
-    // Event Listener für Login Button    loginButton.addEventListener("click", () => {      const enteredPin = adminPassword.value.trim();
-      if (enteredPin === correctPin) {        // PIN korrekt - Dashboard anzeigen, Login ausblenden        adminLogin.classList.remove("active");        adminDashboard.classList.add("active");        loginMessage.textContent = "";        adminPassword.value = "141624";      } else {        // PIN falsch        loginMessage.textContent = "Falscher PIN. Bitte erneut versuchen.";      }    });
-    // Optional: Enter-Taste zum Login    adminPassword.addEventListener("keypress", (event) => {      if (event.key === "Enter") {        loginButton.click();      }    });  </script>
-</body></html>
+
+  <footer>
+    🔐 Nur für den Spielleiter
+  </footer>
+
+  <script>
+    // Admin-Funktionen
+    function updateDashboard() {
+      const teamName = localStorage.getItem("detektivTeamName") || "Kein Team";
+      const missionIndex = parseInt(localStorage.getItem("detektivMission"), 10) || 0;
+      
+      document.getElementById("teamStatus").textContent = `Team: ${teamName}`;
+      document.getElementById("adminMissionTitle").textContent = `Mission ${missionIndex + 1}`;
+    }
+
+    function adminNextMission() {
+      localStorage.setItem("detektivMission", parseInt(localStorage.getItem("detektivMission") || 0, 10) + 1);
+      alert("✅ Nächste Mission freigegeben!");
+      updateDashboard();
+    }
+
+    function sendMessage() {
+      const message = document.getElementById("adminMessage").value;
+      if (message.trim()) {
+        alert(`📨 Nachricht an Team: "${message}"`);
+        document.getElementById("adminMessage").value = "";
+      } else {
+        alert("Bitte eine Nachricht eingeben!");
+      }
+    }
+
+    function finishAdminGame() {
+      if (confirm("🏁 Möchtest du das Spiel wirklich beenden?")) {
+        localStorage.setItem("detektivFinished", "true");
+        alert("✅ Spiel beendet! Das Team sieht jetzt den Siegesbildschirm.");
+      }
+    }
+
+    // Dashboard beim Laden aktualisieren
+    updateDashboard();
+  </script>
+</body>
+</html>
