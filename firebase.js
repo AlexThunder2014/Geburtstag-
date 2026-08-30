@@ -11,8 +11,9 @@ import {
     push
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
 
+
 const firebaseConfig = {
-    apiKey: "AIzaSyACSnquBUpWqgUy9ck5nrICTCQZfq6pbpM",
+    apiKey: "AIzaSyACSnquBUpWqgUy9ck5nrICTCQZfq6pbM",
     authDomain: "dedektive-66ed9.firebaseapp.com",
     projectId: "dedektive-66ed9",
     storageBucket: "dedektive-66ed9.firebasestorage.app",
@@ -21,9 +22,11 @@ const firebaseConfig = {
     databaseURL: "https://dedektive-66ed9-default-rtdb.europe-west1.firebasedatabase.app"
 };
 
+
 const app = initializeApp(firebaseConfig);
 
 const database = getDatabase(app);
+
 
 window.DetektivDB = {
     app,
@@ -37,4 +40,5 @@ window.DetektivDB = {
     push
 };
 
-console.log("🔥 Firebase erfolgreich verbunden");
+
+console.log("🔥 Firebase verbunden");
