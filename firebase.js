@@ -38,7 +38,10 @@ const firebaseConfig = {
 
     messagingSenderId:
         "1033107065836",
-
+    
+    databaseURL:
+        "https://dedektive-66ed9-default-rtdb.europe-west1.firebasedatabase.app",
+    
     appId:
         "1:1033107065836:web:afee087737bfe62c6dcec9",
 
