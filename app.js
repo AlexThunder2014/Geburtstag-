@@ -1,72 +1,585 @@
-import {
-    getDatabase,
-    ref,
-    get
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-database.js";
+// ============================================
+// DETEKTIV-JAGD
+// APP.JS
+// ============================================
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+let DB = null;
 
-const firebaseConfig = {
-    apiKey: "AIzaSyACSnquBUpWqgUy9ck5nrICTCQZfq6pbM",
-    authDomain: "dedektive-66ed9.firebaseapp.com",
-    projectId: "dedektive-66ed9",
-    storageBucket: "dedektive-66ed9.firebasestorage.app",
-    messagingSenderId: "1033107065836",
-    appId: "1:1033107065836:web:afee087737bfe62c6dcec9",
-    databaseURL: "https://dedektive-66ed9-default-rtdb.europe-west1.firebasedatabase.app"
-};
+let currentGroupId = null;
+let currentTeamName = null;
 
-const status = document.getElementById("connectionStatus");
-const message = document.getElementById("joinMessage");
 
-try {
+// ============================================
+// ELEMENTE
+// ============================================
 
-    status.textContent = "🟡 Firebase wird getestet...";
+const connectionStatus =
+    document.getElementById("connectionStatus");
 
-    const app = initializeApp(firebaseConfig);
+const joinButton =
+    document.getElementById("joinButton");
 
-    const database = getDatabase(app);
+const joinMessage =
+    document.getElementById("joinMessage");
 
-    const databaseRef = ref(database, "groups");
 
-    const result = await get(databaseRef);
+// ============================================
+// FIREBASE STARTEN
+// ============================================
 
-    status.textContent = "🟢 FIREBASE FUNKTIONIERT!";
+function startFirebase() {
 
-    status.className = "connection-status online";
+    if (
+        !window.DetektivDB ||
+        !window.DetektivDB.database
+    ) {
 
-    message.className = "message success";
+        console.error(
+            "Firebase wurde nicht geladen."
+        );
 
-    message.textContent =
-        "✅ Verbindung zu Firebase funktioniert!\n\n" +
-        "Datenbank erreichbar.\n\n" +
-        "Jetzt können wir die Gruppenfunktion aktivieren.";
+        if (connectionStatus) {
 
-    console.log("Firebase erfolgreich:", result.val());
+            connectionStatus.textContent =
+                "🔴 Verbindung zur Zentrale fehlgeschlagen";
 
-} catch (error) {
+        }
 
-    status.textContent = "🔴 FIREBASE FEHLER";
+        return false;
+    }
 
-    status.className = "connection-status offline";
 
-    message.className = "message error";
+    DB = window.DetektivDB;
 
-    message.style.whiteSpace = "pre-wrap";
 
-    message.textContent =
-        "❌ DER GENAU FEHLER IST:\n\n" +
-        "Code: " +
-        (error.code || "kein Code") +
-        "\n\n" +
-        "Nachricht:\n" +
-        (error.message || error.toString());
+    if (connectionStatus) {
 
-    console.error(
-        "KOMPLETTER FIREBASE FEHLER:",
-        error
+        connectionStatus.textContent =
+            "🟢 Verbindung zur Zentrale hergestellt";
+
+        connectionStatus.className =
+            "connection-status online";
+
+    }
+
+
+    if (joinButton) {
+
+        joinButton.disabled = false;
+
+    }
+
+
+    console.log(
+        "🔥 Firebase erfolgreich verbunden"
+    );
+
+
+    return true;
+}
+
+
+// ============================================
+// GRUPPE BETRETEN
+// ============================================
+
+async function joinGroup() {
+
+    const teamInput =
+        document.getElementById("teamInput");
+
+    const pinInput =
+        document.getElementById("groupPinInput");
+
+
+    const teamName =
+        teamInput ?
+        teamInput.value.trim() :
+        "";
+
+
+    const pin =
+        pinInput ?
+        pinInput.value.trim() :
+        "";
+
+
+    if (!teamName) {
+
+        showMessage(
+            "❌ Bitte einen Teamnamen eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!pin) {
+
+        showMessage(
+            "❌ Bitte den Gruppen-PIN eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!DB) {
+
+        if (!startFirebase()) {
+
+            showMessage(
+                "❌ Verbindung zur Zentrale fehlgeschlagen.",
+                "error"
+            );
+
+            return;
+        }
+    }
+
+
+    try {
+
+        if (joinButton) {
+
+            joinButton.disabled = true;
+
+        }
+
+
+        showMessage(
+            "🔎 Gruppe wird gesucht...",
+            ""
+        );
+
+
+        const groupsReference =
+            DB.ref(
+                DB.database,
+                "groups"
+            );
+
+
+        const snapshot =
+            await DB.get(
+                groupsReference
+            );
+
+
+        const groups =
+            snapshot.val() || {};
+
+
+        let foundGroup = null;
+
+
+        for (
+            const groupId in groups
+        ) {
+
+            const group =
+                groups[groupId];
+
+
+            if (
+                group &&
+                String(group.pin) ===
+                String(pin)
+            ) {
+
+                foundGroup = {
+
+                    id: groupId,
+                    data: group
+
+                };
+
+                break;
+            }
+        }
+
+
+        if (!foundGroup) {
+
+            showMessage(
+                "❌ Keine Gruppe mit diesem PIN gefunden.",
+                "error"
+            );
+
+            if (joinButton) {
+
+                joinButton.disabled = false;
+
+            }
+
+            return;
+        }
+
+
+        currentGroupId =
+            foundGroup.id;
+
+        currentTeamName =
+            teamName;
+
+
+        // Team in Firebase speichern
+
+        await DB.update(
+
+            DB.ref(
+                DB.database,
+                "groups/" +
+                currentGroupId
+            ),
+
+            {
+
+                teamName:
+                    teamName,
+
+                online:
+                    true,
+
+                lastSeen:
+                    Date.now()
+
+            }
+
+        );
+
+
+        // Für die nächste Seite merken
+
+        sessionStorage.setItem(
+            "detektivGroupId",
+            currentGroupId
+        );
+
+
+        sessionStorage.setItem(
+            "detektivTeamName",
+            currentTeamName
+        );
+
+
+        showMessage(
+            "✅ Gruppe erfolgreich betreten!",
+            "success"
+        );
+
+
+        // Falls eine Spielseite existiert,
+        // kann sie hier geöffnet werden.
+
+        setTimeout(() => {
+
+            if (
+                document.body.dataset.gamePage ===
+                "true"
+            ) {
+
+                return;
+
+            }
+
+
+            // Nur weiterleiten, wenn
+            // game.html vorhanden sein soll.
+
+            // window.location.href = "game.html";
+
+        }, 500);
+
+
+    } catch (error) {
+
+        console.error(
+            "Firebase Fehler:",
+            error
+        );
+
+
+        showMessage(
+            "❌ Verbindung zur Zentrale fehlgeschlagen.\n\n" +
+            "Fehler: " +
+            (error.message || error),
+            "error"
+        );
+
+
+        if (joinButton) {
+
+            joinButton.disabled = false;
+
+        }
+
+    }
+
+}
+
+
+// ============================================
+// NACHRICHT ANZEIGEN
+// ============================================
+
+function showMessage(
+    text,
+    type
+) {
+
+    if (!joinMessage) {
+
+        return;
+    }
+
+
+    joinMessage.textContent =
+        text;
+
+
+    joinMessage.className =
+        "message";
+
+
+    if (type) {
+
+        joinMessage.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+// ============================================
+// ADMIN / GRUPPENFUNKTIONEN
+// ============================================
+
+async function createGroup(
+    groupName,
+    pin
+) {
+
+    if (!DB) {
+
+        startFirebase();
+
+    }
+
+
+    if (!groupName || !pin) {
+
+        return null;
+
+    }
+
+
+    try {
+
+        const groupsReference =
+            DB.ref(
+                DB.database,
+                "groups"
+            );
+
+
+        const newGroup =
+            DB.push(
+                groupsReference
+            );
+
+
+        const groupData = {
+
+            name:
+                groupName,
+
+            pin:
+                String(pin),
+
+            teamName:
+                "",
+
+            online:
+                false,
+
+            createdAt:
+                Date.now(),
+
+            lastSeen:
+                Date.now(),
+
+            currentStation:
+                0
+
+        };
+
+
+        await DB.set(
+            newGroup,
+            groupData
+        );
+
+
+        return newGroup.key;
+
+    } catch (error) {
+
+        console.error(
+            "Gruppe konnte nicht erstellt werden:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+// ============================================
+// GRUPPE BEOBACHTEN
+// ============================================
+
+function watchGroup(
+    groupId,
+    callback
+) {
+
+    if (!DB || !groupId) {
+
+        return null;
+
+    }
+
+
+    const groupReference =
+        DB.ref(
+            DB.database,
+            "groups/" +
+            groupId
+        );
+
+
+    return DB.onValue(
+        groupReference,
+        snapshot => {
+
+            const data =
+                snapshot.val();
+
+
+            if (callback) {
+
+                callback(data);
+
+            }
+
+        }
     );
 
 }
+
+
+// ============================================
+// GRUPPE LÖSCHEN
+// ============================================
+
+async function deleteGroup(
+    groupId
+) {
+
+    if (!DB || !groupId) {
+
+        return false;
+
+    }
+
+
+    try {
+
+        await DB.remove(
+
+            DB.ref(
+                DB.database,
+                "groups/" +
+                groupId
+            )
+
+        );
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            error
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+// ============================================
+// BUTTON
+// ============================================
+
+if (joinButton) {
+
+    joinButton.addEventListener(
+        "click",
+        joinGroup
+    );
+
+}
+
+
+// ============================================
+// ENTER-TASTE
+// ============================================
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key === "Enter" &&
+            document.activeElement &&
+            (
+                document.activeElement.id ===
+                "teamInput" ||
+
+                document.activeElement.id ===
+                "groupPinInput"
+            )
+        ) {
+
+            joinGroup();
+
+        }
+
+    }
+);
+
+
+// ============================================
+// START
+// ============================================
+
+window.addEventListener(
+    "load",
+    () => {
+
+        startFirebase();
+
+    }
+);
