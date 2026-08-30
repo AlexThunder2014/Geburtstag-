@@ -1,6 +1,7 @@
 /* =========================================
    DETEKTIV-JAGD
    app.js
+   KINDERBEREICH
    ========================================= */
 
 let missions = [];
@@ -12,25 +13,50 @@ let teamName = "";
    ELEMENTE
    ========================================= */
 
-const startScreen = document.getElementById("startScreen");
-const missionScreen = document.getElementById("missionScreen");
-const waitingScreen = document.getElementById("waitingScreen");
-const finishScreen = document.getElementById("finishScreen");
+const startScreen =
+    document.getElementById("startScreen");
 
-const teamInput = document.getElementById("teamInput");
-const startButton = document.getElementById("startButton");
+const missionScreen =
+    document.getElementById("missionScreen");
 
-const teamNameDisplay = document.getElementById("teamName");
+const waitingScreen =
+    document.getElementById("waitingScreen");
 
-const missionTitle = document.getElementById("missionTitle");
-const stationNumber = document.getElementById("stationNumber");
+const finishScreen =
+    document.getElementById("finishScreen");
 
-const clueText = document.getElementById("clueText");
-const taskText = document.getElementById("taskText");
+const teamInput =
+    document.getElementById("teamInput");
 
-const answerInput = document.getElementById("answerInput");
-const answerButton = document.getElementById("answerButton");
-const answerMessage = document.getElementById("answerMessage");
+const startButton =
+    document.getElementById("startButton");
+
+const teamNameDisplay =
+    document.getElementById("teamName");
+
+const missionTitle =
+    document.getElementById("missionTitle");
+
+const stationNumber =
+    document.getElementById("stationNumber");
+
+const clueText =
+    document.getElementById("clueText");
+
+const taskText =
+    document.getElementById("taskText");
+
+const answerInput =
+    document.getElementById("answerInput");
+
+const answerButton =
+    document.getElementById("answerButton");
+
+const answerMessage =
+    document.getElementById("answerMessage");
+
+const gameStatus =
+    document.getElementById("gameStatus");
 
 
 /* =========================================
@@ -39,25 +65,23 @@ const answerMessage = document.getElementById("answerMessage");
 
 function showScreen(screen) {
 
-    if (startScreen) {
-        startScreen.classList.remove("active");
-    }
+    [
+        startScreen,
+        missionScreen,
+        waitingScreen,
+        finishScreen
+    ].forEach(function(element) {
 
-    if (missionScreen) {
-        missionScreen.classList.remove("active");
-    }
+        if (element) {
+            element.classList.remove("active");
+        }
 
-    if (waitingScreen) {
-        waitingScreen.classList.remove("active");
-    }
-
-    if (finishScreen) {
-        finishScreen.classList.remove("active");
-    }
+    });
 
     if (screen) {
         screen.classList.add("active");
     }
+
 }
 
 
@@ -69,26 +93,42 @@ async function loadMissions() {
 
     try {
 
-        const response = await fetch("missions.json");
+        const response =
+            await fetch("missions.json");
 
         if (!response.ok) {
-            throw new Error("missions.json konnte nicht geladen werden.");
+            throw new Error(
+                "missions.json konnte nicht geladen werden."
+            );
         }
 
-        missions = await response.json();
+        missions =
+            await response.json();
 
-        console.log("✅ Missionen geladen:", missions);
+        console.log(
+            "✅ Missionen geladen:",
+            missions
+        );
 
     } catch (error) {
 
-        console.error("❌ Fehler:", error);
+        console.error(error);
 
         if (clueText) {
+
             clueText.textContent =
-                "Die Missionen konnten nicht geladen werden.";
+                "⚠️ Die Missionen konnten nicht geladen werden.";
+
+        }
+
+        if (startButton) {
+
+            startButton.disabled = true;
+
         }
 
     }
+
 }
 
 
@@ -98,31 +138,40 @@ async function loadMissions() {
 
 if (startButton) {
 
-    startButton.addEventListener("click", startGame);
+    startButton.addEventListener(
+        "click",
+        startGame
+    );
 
 }
 
 
 if (teamInput) {
 
-    teamInput.addEventListener("keydown", function(event) {
+    teamInput.addEventListener(
+        "keydown",
+        function(event) {
 
-        if (event.key === "Enter") {
-            startGame();
+            if (event.key === "Enter") {
+                startGame();
+            }
+
         }
-
-    });
+    );
 
 }
 
 
 function startGame() {
 
-    const name = teamInput.value.trim();
+    const name =
+        teamInput.value.trim();
 
     if (!name) {
 
-        alert("🔎 Bitte gebt zuerst euren Teamnamen ein.");
+        alert(
+            "🔎 Bitte gebt zuerst euren Teamnamen ein."
+        );
 
         teamInput.focus();
 
@@ -131,16 +180,18 @@ function startGame() {
 
     if (missions.length === 0) {
 
-        alert("Die Missionen sind noch nicht geladen.");
+        alert(
+            "⚠️ Die Missionen sind noch nicht geladen."
+        );
 
         return;
     }
 
-    teamName = name;
+    teamName =
+        name;
 
-    teamNameDisplay.textContent = teamName;
-
-    currentMission = 0;
+    currentMission =
+        0;
 
     localStorage.setItem(
         "detektivTeamName",
@@ -152,9 +203,15 @@ function startGame() {
         currentMission
     );
 
-    localStorage.removeItem("detektivFinished");
+    localStorage.removeItem(
+        "detektivFinished"
+    );
+
+    teamNameDisplay.textContent =
+        teamName;
 
     showMission();
+
 }
 
 
@@ -174,7 +231,8 @@ function showMission() {
         return;
     }
 
-    const mission = missions[currentMission];
+    const mission =
+        missions[currentMission];
 
     missionTitle.textContent =
         mission.title;
@@ -188,13 +246,29 @@ function showMission() {
     taskText.textContent =
         mission.task;
 
-    answerInput.value = "";
+    answerInput.value =
+        "";
 
-    answerMessage.className = "message";
+    answerMessage.className =
+        "message";
 
-    answerMessage.textContent = "";
+    answerMessage.textContent =
+        "";
 
-    showScreen(missionScreen);
+    if (gameStatus) {
+
+        gameStatus.textContent =
+            "Ihr könnt eure Lösung eingeben.";
+
+    }
+
+    answerButton.disabled =
+        false;
+
+    showScreen(
+        missionScreen
+    );
+
 }
 
 
@@ -228,6 +302,16 @@ if (answerInput) {
 }
 
 
+function normalizeAnswer(value) {
+
+    return String(value)
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, " ");
+
+}
+
+
 function checkAnswer() {
 
     const answer =
@@ -239,7 +323,7 @@ function checkAnswer() {
             "message error";
 
         answerMessage.textContent =
-            "🔎 Gebt zuerst eine Lösung ein.";
+            "🔎 Bitte gebt eine Lösung ein.";
 
         return;
     }
@@ -248,21 +332,28 @@ function checkAnswer() {
         missions[currentMission];
 
     const correctAnswer =
-        String(mission.answer)
-            .trim()
-            .toLowerCase();
+        normalizeAnswer(
+            mission.answer
+        );
 
     const playerAnswer =
-        answer.toLowerCase();
+        normalizeAnswer(
+            answer
+        );
 
 
-    if (playerAnswer === correctAnswer) {
+    if (
+        playerAnswer === correctAnswer
+    ) {
 
         answerMessage.className =
             "message success";
 
         answerMessage.textContent =
             "✅ Richtig!";
+
+        answerButton.disabled =
+            true;
 
         localStorage.setItem(
             "detektivAnswer",
@@ -273,6 +364,18 @@ function checkAnswer() {
             "detektivAnswerCorrect",
             "true"
         );
+
+        localStorage.setItem(
+            "detektivAnswerTime",
+            new Date().toISOString()
+        );
+
+        if (gameStatus) {
+
+            gameStatus.textContent =
+                "✅ Lösung richtig. Der Spielleiter wurde informiert.";
+
+        }
 
         setTimeout(
             showWaitingScreen,
@@ -308,7 +411,9 @@ function checkAnswer() {
 
 function showWaitingScreen() {
 
-    showScreen(waitingScreen);
+    showScreen(
+        waitingScreen
+    );
 
 }
 
@@ -326,7 +431,17 @@ function nextMission() {
         currentMission
     );
 
-    if (currentMission >= missions.length) {
+    localStorage.removeItem(
+        "detektivAnswer"
+    );
+
+    localStorage.removeItem(
+        "detektivAnswerCorrect"
+    );
+
+    if (
+        currentMission >= missions.length
+    ) {
 
         finishGame();
 
@@ -334,11 +449,12 @@ function nextMission() {
     }
 
     showMission();
+
 }
 
 
 /* =========================================
-   SPIEL BEENDET
+   SPIEL BEENDEN
    ========================================= */
 
 function finishGame() {
@@ -348,7 +464,10 @@ function finishGame() {
         "true"
     );
 
-    showScreen(finishScreen);
+    showScreen(
+        finishScreen
+    );
+
 }
 
 
@@ -376,30 +495,34 @@ function restoreGame() {
 
     if (savedTeam) {
 
-        teamName = savedTeam;
+        teamName =
+            savedTeam;
 
-        if (teamNameDisplay) {
-            teamNameDisplay.textContent =
-                teamName;
-        }
+        teamNameDisplay.textContent =
+            teamName;
 
-        if (teamInput) {
-            teamInput.value =
-                teamName;
-        }
+        teamInput.value =
+            teamName;
 
     }
 
 
-    if (savedMission !== null) {
+    if (
+        savedMission !== null
+    ) {
 
         currentMission =
-            parseInt(savedMission, 10);
+            parseInt(
+                savedMission,
+                10
+            );
 
     }
 
 
-    if (finished === "true") {
+    if (
+        finished === "true"
+    ) {
 
         finishGame();
 
