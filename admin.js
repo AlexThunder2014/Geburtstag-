@@ -1,7 +1,7 @@
 /* =========================================
    DETEKTIV-JAGD
    admin.js
-   SPIELLEITER
+   SPIELLEITER-ZENTRALE
    ========================================= */
 
 const ADMIN_PIN = "1234";
@@ -44,9 +44,6 @@ const adminMissionTitle =
 const adminMissionClue =
     document.getElementById("adminMissionClue");
 
-const nextMissionButton =
-    document.getElementById("nextMissionButton");
-
 const adminActionMessage =
     document.getElementById("adminActionMessage");
 
@@ -66,27 +63,57 @@ const logoutButton =
     document.getElementById("logoutButton");
 
 
+/* =========================================
+   NEUE ADMIN-EINGABEN
+   ========================================= */
+
+const adminTitleInput =
+    document.getElementById("adminTitleInput");
+
+const adminClueInput =
+    document.getElementById("adminClueInput");
+
+const adminTaskInput =
+    document.getElementById("adminTaskInput");
+
+const adminSolutionInput =
+    document.getElementById("adminSolutionInput");
+
+const sendMissionButton =
+    document.getElementById("sendMissionButton");
+
+const missionSendStatus =
+    document.getElementById("missionSendStatus");
+
 
 /* =========================================
    LOGIN
    ========================================= */
 
-loginButton.addEventListener(
-    "click",
-    login
-);
+if (loginButton) {
+
+    loginButton.addEventListener(
+        "click",
+        login
+    );
+
+}
 
 
-adminPassword.addEventListener(
-    "keydown",
-    function(event) {
+if (adminPassword) {
 
-        if (event.key === "Enter") {
-            login();
+    adminPassword.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+                login();
+            }
+
         }
+    );
 
-    }
-);
+}
 
 
 function login() {
@@ -131,23 +158,27 @@ function login() {
 
 
 /* =========================================
-   DASHBOARD
+   DASHBOARD ANZEIGEN
    ========================================= */
 
 function showDashboard() {
 
-    adminLogin.classList.remove(
-        "active"
-    );
+    if (adminLogin) {
+        adminLogin.classList.remove("active");
+    }
 
-    adminDashboard.classList.add(
-        "active"
-    );
+    if (adminDashboard) {
+        adminDashboard.classList.add("active");
+    }
 
     updateDashboard();
 
 }
 
+
+/* =========================================
+   DASHBOARD AKTUALISIEREN
+   ========================================= */
 
 function updateDashboard() {
 
@@ -172,264 +203,420 @@ function updateDashboard() {
         );
 
 
-    adminTeamName.textContent =
-        team || "Noch kein Team";
+    if (adminTeamName) {
 
-
-    if (station !== null) {
-
-        adminStation.textContent =
-            "Station " +
-            (parseInt(station, 10) + 1);
-
-    } else {
-
-        adminStation.textContent =
-            "-";
+        adminTeamName.textContent =
+            team || "Noch kein Team";
 
     }
 
 
-    adminAnswer.textContent =
-        answer || "-";
+    if (adminStation) {
 
+        if (station !== null) {
 
-    if (correct === "true") {
+            adminStation.textContent =
+                "Station " +
+                (parseInt(station, 10) + 1);
 
-        adminAnswerStatus.textContent =
-            "✅ Richtig";
+        } else {
 
-    } else if (correct === "false") {
+            adminStation.textContent =
+                "-";
 
-        adminAnswerStatus.textContent =
-            "❌ Falsch";
-
-    } else {
-
-        adminAnswerStatus.textContent =
-            "⏳ Wartet";
+        }
 
     }
 
 
-    loadCurrentMission(
-        station
+    if (adminAnswer) {
+
+        adminAnswer.textContent =
+            answer || "-";
+
+    }
+
+
+    if (adminAnswerStatus) {
+
+        if (correct === "true") {
+
+            adminAnswerStatus.textContent =
+                "✅ Richtig";
+
+        } else if (correct === "false") {
+
+            adminAnswerStatus.textContent =
+                "❌ Falsch";
+
+        } else {
+
+            adminAnswerStatus.textContent =
+                "⏳ Wartet";
+
+        }
+
+    }
+
+
+    loadSavedMission();
+
+}
+
+
+/* =========================================
+   EIGENEN HINWEIS LADEN
+   ========================================= */
+
+function loadSavedMission() {
+
+    const savedMission =
+        localStorage.getItem(
+            "detektivCustomMission"
+        );
+
+    if (!savedMission) {
+        return;
+    }
+
+    try {
+
+        const mission =
+            JSON.parse(savedMission);
+
+
+        if (adminTitleInput) {
+            adminTitleInput.value =
+                mission.title || "";
+        }
+
+        if (adminClueInput) {
+            adminClueInput.value =
+                mission.clue || "";
+        }
+
+        if (adminTaskInput) {
+            adminTaskInput.value =
+                mission.task || "";
+        }
+
+        if (adminSolutionInput) {
+            adminSolutionInput.value =
+                mission.answer || "";
+        }
+
+
+        if (adminMissionTitle) {
+
+            adminMissionTitle.textContent =
+                mission.title || "Eigener Hinweis";
+
+        }
+
+
+        if (adminMissionClue) {
+
+            adminMissionClue.textContent =
+                mission.clue || "---";
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Eigener Hinweis konnte nicht geladen werden:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   EIGENEN HINWEIS ABSCHICKEN
+   ========================================= */
+
+if (sendMissionButton) {
+
+    sendMissionButton.addEventListener(
+        "click",
+        sendCustomMission
+    );
+
+}
+
+
+function sendCustomMission() {
+
+    const title =
+        adminTitleInput
+            ? adminTitleInput.value.trim()
+            : "";
+
+    const clue =
+        adminClueInput
+            ? adminClueInput.value.trim()
+            : "";
+
+    const task =
+        adminTaskInput
+            ? adminTaskInput.value.trim()
+            : "";
+
+    const answer =
+        adminSolutionInput
+            ? adminSolutionInput.value.trim()
+            : "";
+
+
+    /* Pflichtfelder prüfen */
+
+    if (!title) {
+
+        showMissionStatus(
+            "❌ Bitte einen Titel eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!clue) {
+
+        showMissionStatus(
+            "❌ Bitte einen Hinweis eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!task) {
+
+        showMissionStatus(
+            "❌ Bitte eine Aufgabe eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!answer) {
+
+        showMissionStatus(
+            "❌ Bitte eine Lösung eingeben.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    /* Eigene Mission erstellen */
+
+    const customMission = {
+
+        title: title,
+
+        clue: clue,
+
+        task: task,
+
+        answer: answer,
+
+        sentAt:
+            new Date().toISOString()
+
+    };
+
+
+    /* Auf dem Gerät speichern */
+
+    localStorage.setItem(
+        "detektivCustomMission",
+        JSON.stringify(customMission)
+    );
+
+
+    /* Status setzen */
+
+    localStorage.setItem(
+        "detektivCustomMissionActive",
+        "true"
+    );
+
+
+    /* Vorschau aktualisieren */
+
+    if (adminMissionTitle) {
+
+        adminMissionTitle.textContent =
+            title;
+
+    }
+
+
+    if (adminMissionClue) {
+
+        adminMissionClue.textContent =
+            clue;
+
+    }
+
+
+    showMissionStatus(
+        "📡 Hinweis wurde abgeschickt!",
+        "success"
     );
 
 }
 
 
 /* =========================================
-   AKTUELLE MISSION
+   STATUS FÜR HINWEIS
    ========================================= */
 
-async function loadCurrentMission(
-    station
+function showMissionStatus(
+    text,
+    type
 ) {
 
-    try {
-
-        const response =
-            await fetch("missions.json");
-
-        const missions =
-            await response.json();
-
-        let index =
-            station === null
-                ? 0
-                : parseInt(station, 10);
-
-
-        if (
-            index < 0 ||
-            index >= missions.length
-        ) {
-
-            adminMissionTitle.textContent =
-                "Keine weitere Mission";
-
-            adminMissionClue.textContent =
-                "🏆 Die Schnitzeljagd ist beendet.";
-
-            return;
-        }
-
-
-        const mission =
-            missions[index];
-
-
-        adminMissionTitle.textContent =
-            mission.title;
-
-
-        adminMissionClue.textContent =
-            mission.clue;
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        adminMissionTitle.textContent =
-            "Fehler";
-
-        adminMissionClue.textContent =
-            "missions.json konnte nicht geladen werden.";
-
+    if (!missionSendStatus) {
+        return;
     }
+
+    missionSendStatus.className =
+        "message " + type;
+
+    missionSendStatus.textContent =
+        text;
 
 }
 
 
 /* =========================================
-   NÄCHSTE MISSION
+   NACHRICHT AN TEAM
    ========================================= */
 
-nextMissionButton.addEventListener(
-    "click",
-    function() {
+if (sendMessageButton) {
 
-        const station =
-            parseInt(
-                localStorage.getItem(
-                    "detektivMission"
-                ) || "0",
-                10
+    sendMessageButton.addEventListener(
+        "click",
+        function() {
+
+            const message =
+                adminMessageInput.value.trim();
+
+
+            if (!message) {
+
+                messageStatus.className =
+                    "message error";
+
+                messageStatus.textContent =
+                    "❌ Bitte zuerst eine Nachricht eingeben.";
+
+                return;
+
+            }
+
+
+            localStorage.setItem(
+                "detektivAdminMessage",
+                message
             );
 
 
-        const next =
-            station + 1;
+            localStorage.setItem(
+                "detektivAdminMessageTime",
+                new Date().toISOString()
+            );
 
-
-        localStorage.setItem(
-            "detektivMission",
-            next
-        );
-
-
-        localStorage.removeItem(
-            "detektivAnswer"
-        );
-
-
-        localStorage.removeItem(
-            "detektivAnswerCorrect"
-        );
-
-
-        adminActionMessage.className =
-            "message success";
-
-
-        adminActionMessage.textContent =
-            "🚀 Nächste Station freigeschaltet!";
-
-
-        updateDashboard();
-
-    }
-);
-
-
-/* =========================================
-   NACHRICHT SENDEN
-   ========================================= */
-
-sendMessageButton.addEventListener(
-    "click",
-    function() {
-
-        const message =
-            adminMessageInput.value.trim();
-
-
-        if (!message) {
 
             messageStatus.className =
-                "message error";
+                "message success";
 
             messageStatus.textContent =
-                "Bitte zuerst eine Nachricht eingeben.";
+                "📡 Nachricht wurde abgeschickt.";
 
-            return;
+
+            adminMessageInput.value =
+                "";
+
         }
+    );
 
-
-        localStorage.setItem(
-            "detektivAdminMessage",
-            message
-        );
-
-
-        messageStatus.className =
-            "message success";
-
-        messageStatus.textContent =
-            "📡 Nachricht gespeichert.";
-
-
-        adminMessageInput.value =
-            "";
-
-    }
-);
+}
 
 
 /* =========================================
-   SPIEL BEENDEN
+   MISSION BEENDEN
    ========================================= */
 
-finishGameButton.addEventListener(
-    "click",
-    function() {
+if (finishGameButton) {
 
-        const confirmation =
-            confirm(
-                "Schnitzeljagd wirklich beenden?"
+    finishGameButton.addEventListener(
+        "click",
+        function() {
+
+            const confirmation =
+                confirm(
+                    "Schnitzeljagd wirklich beenden?"
+                );
+
+
+            if (!confirmation) {
+                return;
+            }
+
+
+            localStorage.setItem(
+                "detektivFinished",
+                "true"
             );
 
 
-        if (!confirmation) {
-            return;
+            if (adminActionMessage) {
+
+                adminActionMessage.className =
+                    "message success";
+
+                adminActionMessage.textContent =
+                    "🏆 Mission beendet!";
+
+            }
+
         }
+    );
 
-
-        localStorage.setItem(
-            "detektivFinished",
-            "true"
-        );
-
-
-        adminActionMessage.className =
-            "message success";
-
-        adminActionMessage.textContent =
-            "🏆 Mission beendet!";
-
-    }
-);
+}
 
 
 /* =========================================
-   LOGOUT
+   ADMIN VERLASSEN
    ========================================= */
 
-logoutButton.addEventListener(
-    "click",
-    function() {
+if (logoutButton) {
 
-        sessionStorage.removeItem(
-            "detektivAdmin"
-        );
+    logoutButton.addEventListener(
+        "click",
+        function() {
 
-        window.location.href =
-            "index.html";
+            sessionStorage.removeItem(
+                "detektivAdmin"
+            );
 
-    }
-);
+            window.location.href =
+                "index.html";
+
+        }
+    );
+
+}
 
 
 /* =========================================
