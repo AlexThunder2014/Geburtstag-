@@ -2,29 +2,29 @@
   {
     "id": 1,
     "title": "Die erste Spur",
-    "clue": "🔎 Ein geheimnisvoller Hinweis wartet auf euch. Sucht an dem Ort, an dem Kinder besonders gerne spielen.",
+    "clue": "🔎 Eine geheimnisvolle Spur wurde gefunden. Sie führt euch zu einem Ort, an dem Kinder gerne spielen.",
     "task": "Welcher Ort ist gemeint?",
     "answer": "Spielplatz"
   },
   {
     "id": 2,
     "title": "Die geheime Nachricht",
-    "clue": "🕵️ Ihr habt eine Nachricht gefunden. Sie ist in Morsecode geschrieben.",
-    "task": "Entschlüsselt den Morsecode und gebt das Wort ein.",
+    "clue": "📡 Eine Nachricht wurde in Morsezeichen hinterlassen.",
+    "task": "Entschlüsselt die Nachricht.",
     "answer": "GEHEIM"
   },
   {
     "id": 3,
     "title": "Die unsichtbare Spur",
-    "clue": "🔦 Auf diesem Zettel scheint nichts zu stehen. Vielleicht braucht ihr eine besondere Lampe.",
-    "task": "Welches Wort findet ihr unter UV-Licht?",
+    "clue": "🔦 Auf dem Papier scheint nichts zu stehen. Vielleicht braucht ihr eine besondere Lampe.",
+    "task": "Welches Wort erscheint unter UV-Licht?",
     "answer": "DETEKTIV"
   },
   {
     "id": 4,
     "title": "Das geheime Bild",
-    "clue": "🎨 Auf dem Papier scheint nur ein normales Bild zu sein. Übermalt es vorsichtig mit Wasserfarben.",
-    "task": "Welches Wort erscheint?",
+    "clue": "🎨 Auf diesem Blatt scheint nur ein normales Bild zu sein. Malt vorsichtig mit Wasserfarben darüber.",
+    "task": "Welches Wort kommt zum Vorschein?",
     "answer": "SCHATZ"
   },
   {
