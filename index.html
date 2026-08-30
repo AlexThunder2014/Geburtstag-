@@ -12,17 +12,25 @@
 <body>
 
 <header class="topbar">
-    <div class="logo">🕵️ DETEKTIV-JAGD</div>
+
+    <div class="logo">
+        🕵️ DETEKTIV-JAGD
+    </div>
 
     <div class="team">
-        Team: <strong id="teamName">---</strong>
+        Team:
+        <strong id="teamName">---</strong>
     </div>
+
 </header>
 
 
 <main>
 
-    <!-- START -->
+    <!-- ==============================
+         START
+         ============================== -->
+
     <section id="startScreen" class="screen active">
 
         <div class="card hero-card">
@@ -32,7 +40,8 @@
             <h1>Willkommen, Detektive!</h1>
 
             <p>
-                Gebt euren Teamnamen ein und startet eure geheime Mission.
+                Eure Mission beginnt.
+                Gebt zuerst euren Teamnamen ein.
             </p>
 
             <input
@@ -42,7 +51,10 @@
                 maxlength="30"
             >
 
-            <button id="startButton" class="main-button">
+            <button
+                id="startButton"
+                class="main-button"
+            >
                 🚀 Mission starten
             </button>
 
@@ -51,14 +63,24 @@
     </section>
 
 
-    <!-- MISSION -->
+    <!-- ==============================
+         MISSION
+         ============================== -->
+
     <section id="missionScreen" class="screen">
 
         <div class="mission-header">
 
             <div>
-                <span class="small-label">AKTUELLE MISSION</span>
-                <h2 id="missionTitle">Station 1</h2>
+
+                <span class="small-label">
+                    AKTUELLE MISSION
+                </span>
+
+                <h2 id="missionTitle">
+                    Station 1
+                </h2>
+
             </div>
 
             <div class="station-number">
@@ -69,28 +91,38 @@
 
 
         <!-- HINWEIS -->
+
         <div class="card clue-card">
 
-            <div class="card-icon">📜</div>
+            <div class="card-icon">
+                📜
+            </div>
 
-            <h2>Geheimer Hinweis</h2>
+            <h2>
+                Geheimer Hinweis
+            </h2>
 
             <p id="clueText">
-                Lade Hinweis...
+                Hinweis wird geladen...
             </p>
 
         </div>
 
 
         <!-- AUFGABE -->
+
         <div class="card">
 
-            <div class="card-icon">🧩</div>
+            <div class="card-icon">
+                🧩
+            </div>
 
-            <h2>Was ist die Lösung?</h2>
+            <h2>
+                Eure Aufgabe
+            </h2>
 
             <p id="taskText">
-                ---
+                Aufgabe wird geladen...
             </p>
 
             <input
@@ -100,65 +132,95 @@
                 autocomplete="off"
             >
 
-            <button id="answerButton" class="main-button">
-                🔓 Lösung prüfen
+            <button
+                id="answerButton"
+                class="main-button"
+            >
+                🔓 Lösung überprüfen
             </button>
 
-            <div id="answerMessage" class="message"></div>
+            <div
+                id="answerMessage"
+                class="message"
+            ></div>
 
         </div>
 
 
-        <!-- KARTE -->
+        <!-- WARTEN -->
+
         <div class="card">
 
-            <div class="card-icon">🗺️</div>
-
-            <h2>Detektiv-Karte</h2>
-
-            <div id="map">
-                Karte wird später hier angezeigt.
+            <div class="card-icon">
+                📡
             </div>
+
+            <h2>
+                Spielstatus
+            </h2>
+
+            <p id="gameStatus">
+                Ihr könnt eure Lösung eingeben.
+            </p>
 
         </div>
 
     </section>
 
 
-    <!-- WARTEN -->
+    <!-- ==============================
+         WARTEN
+         ============================== -->
+
     <section id="waitingScreen" class="screen">
 
         <div class="card hero-card">
 
-            <div class="big-icon">⏳</div>
+            <div class="big-icon">
+                ⏳
+            </div>
 
-            <h1>Gut gemacht!</h1>
+            <h1>
+                Gut gemacht!
+            </h1>
 
             <p>
-                Eure Lösung wurde übermittelt.
+                Eure Lösung wurde abgeschickt.
             </p>
 
             <p>
-                Wartet auf den nächsten Hinweis von eurem Detektiv-Leiter.
+                Wartet jetzt auf den Spielleiter.
             </p>
 
             <div class="waiting-animation">
                 🔎
             </div>
 
+            <p id="waitingMessage">
+                Der nächste Hinweis wird freigeschaltet,
+                sobald der Spielleiter ihn aktiviert.
+            </p>
+
         </div>
 
     </section>
 
 
-    <!-- ENDE -->
+    <!-- ==============================
+         ENDE
+         ============================== -->
+
     <section id="finishScreen" class="screen">
 
         <div class="card hero-card">
 
-            <div class="big-icon">🏆</div>
+            <div class="big-icon">
+                🏆
+            </div>
 
-            <h1>MISSION ERFÜLLT!</h1>
+            <h1>
+                MISSION ERFÜLLT!
+            </h1>
 
             <p>
                 Ihr habt den Fall gelöst!
@@ -172,30 +234,59 @@
 
     </section>
 
+
 </main>
+
+
+<!-- ==============================
+     ADMIN-ZUGANG
+     ============================== -->
+
+<div class="admin-access">
+
+    <button
+        type="button"
+        onclick="openAdmin()"
+    >
+        ⚙️ Spielleiter
+    </button>
+
+</div>
 
 
 <footer>
     🕵️ Geheime Detektiv-Zentrale
 </footer>
 
-<div class="admin-access">
-    <button type="button" onclick="openAdmin()">
-        ⚙️ Spielleiter
-    </button>
-</div>
+
+<!-- ==============================
+     ADMIN-PASSWORT
+     ============================== -->
 
 <script>
-function openAdmin() {
-    const password = prompt("🔐 Admin-Passwort:");
 
-    if (password === "141624") {
+function openAdmin() {
+
+    const password = prompt(
+        "🔐 Admin-PIN eingeben:"
+    );
+
+    if (password === "1234") {
+
         window.location.href = "admin.html";
+
     } else if (password !== null) {
-        alert("❌ Falsches Passwort!");
+
+        alert(
+            "❌ Falsche PIN!"
+        );
+
     }
+
 }
+
 </script>
+
 
 <script src="app.js"></script>
 
