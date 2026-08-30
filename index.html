@@ -1,25 +1,44 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#111827"
+    >
 
     <title>🕵️ Detektiv-Jagd</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
 
+
 <body>
+
 
 <header class="topbar">
 
     <div class="logo">
-        🕵️ DETEKTIV-JAGD
+        🕵️ Detektiv-Jagd
     </div>
 
-    <div class="team">
-        Team:
-        <strong id="teamName">---</strong>
+    <div
+        id="connectionStatus"
+        class="connection-status"
+    >
+        🔴 Verbindung wird hergestellt...
     </div>
 
 </header>
@@ -27,220 +46,278 @@
 
 <main>
 
-    <!-- ==============================
-         START
-         ============================== -->
 
-    <section id="startScreen" class="screen active">
+<!-- =========================================
+     START
+     ========================================= -->
 
-        <div class="card hero-card">
+<section
+    id="startScreen"
+    class="screen active"
+>
 
-            <div class="big-icon">🔎</div>
+    <div class="card hero-card">
 
-            <h1>Willkommen, Detektive!</h1>
-
-            <p>
-                Eure Mission beginnt.
-                Gebt zuerst euren Teamnamen ein.
-            </p>
-
-            <input
-                id="teamInput"
-                type="text"
-                placeholder="Euer Teamname"
-                maxlength="30"
-            >
-
-            <button
-                id="startButton"
-                class="main-button"
-            >
-                🚀 Mission starten
-            </button>
-
+        <div class="big-icon">
+            🔎
         </div>
 
-    </section>
+        <h1>
+            Willkommen, Detektive!
+        </h1>
+
+        <p>
+            Gebt euren Teamnamen und eure
+            Gruppen-PIN ein.
+        </p>
 
 
-    <!-- ==============================
-         MISSION
-         ============================== -->
+        <label for="teamInput">
+            Teamname
+        </label>
 
-    <section id="missionScreen" class="screen">
-
-        <div class="mission-header">
-
-            <div>
-
-                <span class="small-label">
-                    AKTUELLE MISSION
-                </span>
-
-                <h2 id="missionTitle">
-                    Station 1
-                </h2>
-
-            </div>
-
-            <div class="station-number">
-                <span id="stationNumber">1</span>
-            </div>
-
-        </div>
+        <input
+            id="teamInput"
+            type="text"
+            maxlength="30"
+            placeholder="z. B. Team Adler"
+            autocomplete="off"
+        >
 
 
-        <!-- HINWEIS -->
+        <label for="groupPinInput">
+            Gruppen-PIN
+        </label>
 
-        <div class="card clue-card">
-
-            <div class="card-icon">
-                📜
-            </div>
-
-            <h2>
-                Geheimer Hinweis
-            </h2>
-
-            <p id="clueText">
-                Hinweis wird geladen...
-            </p>
-
-        </div>
+        <input
+            id="groupPinInput"
+            type="text"
+            inputmode="numeric"
+            maxlength="8"
+            placeholder="PIN"
+            autocomplete="off"
+        >
 
 
-        <!-- AUFGABE -->
-
-        <div class="card">
-
-            <div class="card-icon">
-                🧩
-            </div>
-
-            <h2>
-                Eure Aufgabe
-            </h2>
-
-            <p id="taskText">
-                Aufgabe wird geladen...
-            </p>
-
-            <input
-                id="answerInput"
-                type="text"
-                placeholder="Lösung eingeben..."
-                autocomplete="off"
-            >
-
-            <button
-                id="answerButton"
-                class="main-button"
-            >
-                🔓 Lösung überprüfen
-            </button>
-
-            <div
-                id="answerMessage"
-                class="message"
-            ></div>
-
-        </div>
+        <button
+            id="joinButton"
+            class="main-button"
+        >
+            🚀 Gruppe betreten
+        </button>
 
 
-        <!-- WARTEN -->
+        <div
+            id="joinMessage"
+            class="message"
+        ></div>
 
-        <div class="card">
+    </div>
 
-            <div class="card-icon">
-                📡
-            </div>
-
-            <h2>
-                Spielstatus
-            </h2>
-
-            <p id="gameStatus">
-                Ihr könnt eure Lösung eingeben.
-            </p>
-
-        </div>
-
-    </section>
+</section>
 
 
-    <!-- ==============================
-         WARTEN
-         ============================== -->
 
-    <section id="waitingScreen" class="screen">
+<!-- =========================================
+     MISSION
+     ========================================= -->
 
-        <div class="card hero-card">
+<section
+    id="missionScreen"
+    class="screen"
+>
 
-            <div class="big-icon">
-                ⏳
-            </div>
+    <div class="team-bar">
 
-            <h1>
-                Gut gemacht!
+        <span>
+            👥 Team
+        </span>
+
+        <strong id="teamName">
+            ---
+        </strong>
+
+    </div>
+
+
+    <div class="mission-header">
+
+        <div>
+
+            <span class="small-label">
+                AKTUELLE MISSION
+            </span>
+
+            <h1 id="missionTitle">
+                ---
             </h1>
 
-            <p>
-                Eure Lösung wurde abgeschickt.
-            </p>
+        </div>
 
-            <p>
-                Wartet jetzt auf den Spielleiter.
-            </p>
 
-            <div class="waiting-animation">
-                🔎
-            </div>
+        <div class="station-number">
 
-            <p id="waitingMessage">
-                Der nächste Hinweis wird freigeschaltet,
-                sobald der Spielleiter ihn aktiviert.
-            </p>
+            <span id="stationNumber">
+                —
+            </span>
 
         </div>
 
-    </section>
+    </div>
 
 
-    <!-- ==============================
-         ENDE
-         ============================== -->
 
-    <section id="finishScreen" class="screen">
+    <div class="card clue-card">
 
-        <div class="card hero-card">
-
-            <div class="big-icon">
-                🏆
-            </div>
-
-            <h1>
-                MISSION ERFÜLLT!
-            </h1>
-
-            <p>
-                Ihr habt den Fall gelöst!
-            </p>
-
-            <div class="final-message">
-                🎉 Herzlichen Glückwunsch, Detektive! 🎉
-            </div>
-
+        <div class="card-icon">
+            📜
         </div>
 
-    </section>
+        <h2>
+            Geheimer Hinweis
+        </h2>
+
+        <p id="clueText">
+            ---
+        </p>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <div class="card-icon">
+            🧩
+        </div>
+
+        <h2>
+            Eure Aufgabe
+        </h2>
+
+        <p id="taskText">
+            ---
+        </p>
+
+
+        <label for="answerInput">
+            Eure Lösung
+        </label>
+
+        <input
+            id="answerInput"
+            type="text"
+            placeholder="Lösung eingeben..."
+            autocomplete="off"
+        >
+
+
+        <button
+            id="answerButton"
+            class="main-button"
+        >
+            📡 Lösung abschicken
+        </button>
+
+
+        <div
+            id="answerMessage"
+            class="message"
+        ></div>
+
+    </div>
+
+
+
+    <div class="card">
+
+        <div class="card-icon">
+            📢
+        </div>
+
+        <h2>
+            Nachricht vom Spielleiter
+        </h2>
+
+        <p id="adminMessage">
+            Keine neue Nachricht.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     WARTEN
+     ========================================= -->
+
+<section
+    id="waitingScreen"
+    class="screen"
+>
+
+    <div class="card hero-card">
+
+        <div class="big-icon">
+            ⏳
+        </div>
+
+        <h1>
+            Geschafft!
+        </h1>
+
+        <p>
+            Eure Antwort wurde an den
+            Spielleiter gesendet.
+        </p>
+
+        <p>
+            Wartet auf den nächsten Hinweis.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================================
+     ENDE
+     ========================================= -->
+
+<section
+    id="finishScreen"
+    class="screen"
+>
+
+    <div class="card hero-card">
+
+        <div class="big-icon">
+            🏆
+        </div>
+
+        <h1>
+            MISSION ERFÜLLT!
+        </h1>
+
+        <p>
+            Ihr habt den Fall gelöst!
+        </p>
+
+    </div>
+
+</section>
 
 
 </main>
 
 
-<!-- ==============================
-     ADMIN-ZUGANG
-     ============================== -->
+
+<!-- =========================================
+     ADMIN BUTTON
+     ========================================= -->
 
 <div class="admin-access">
 
@@ -254,41 +331,36 @@
 </div>
 
 
+
 <footer>
-    🕵️ Geheime Detektiv-Zentrale
+    🕵️ Detektiv-Jagd
 </footer>
 
 
-<!-- ==============================
-     ADMIN-PASSWORT
-     ============================== -->
 
 <script>
 
 function openAdmin() {
 
-    const password = prompt(
-        "🔐 Admin-PIN eingeben:"
-    );
-
-    if (password === "1234") {
-
-        window.location.href = "admin.html";
-
-    } else if (password !== null) {
-
-        alert(
-            "❌ Falsche PIN!"
-        );
-
-    }
+    window.location.href =
+        "admin.html";
 
 }
 
 </script>
 
 
-<script src="app.js"></script>
+<script
+    type="module"
+    src="firebase.js"
+></script>
+
+<script
+    type="module"
+    src="app.js"
+></script>
+
 
 </body>
+
 </html>
