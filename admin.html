@@ -10,7 +10,12 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>🕵️ Detektiv-Zentrale</title>
+    <meta
+        name="theme-color"
+        content="#111827"
+    >
+
+    <title>⚙️ Spielleiter-Zentrale</title>
 
     <link
         rel="stylesheet"
@@ -22,57 +27,48 @@
 
 <body>
 
-<header class="topbar">
 
-    <div class="logo">
-        🕵️ DETEKTIV-ZENTRALE
-    </div>
-
-    <div class="team">
-        ADMIN
-    </div>
-
-</header>
-
-
-<main>
-
-
-<!-- =====================================
-     ADMIN LOGIN
-     ===================================== -->
+<!-- =========================================
+     LOGIN
+     ========================================= -->
 
 <section
     id="adminLogin"
     class="screen active"
 >
 
-    <div class="card hero-card">
+    <div class="card hero-card admin-login">
 
         <div class="big-icon">
             🔐
         </div>
 
         <h1>
-            Geheime Zentrale
+            Spielleiter-Zentrale
         </h1>
 
         <p>
-            Dieser Bereich ist nur für den Spielleiter.
+            Gib deine Admin-PIN ein.
         </p>
 
+
         <input
-            type="password"
             id="adminPassword"
+            type="password"
+            inputmode="numeric"
+            maxlength="20"
             placeholder="Admin-PIN"
+            autocomplete="off"
         >
 
+
         <button
-            class="main-button"
             id="loginButton"
+            class="main-button"
         >
             🔓 Zentrale öffnen
         </button>
+
 
         <div
             id="loginMessage"
@@ -85,17 +81,16 @@
 
 
 
-<!-- =====================================
-     ADMIN DASHBOARD
-     ===================================== -->
+<!-- =========================================
+     DASHBOARD
+     ========================================= -->
 
 <section
     id="adminDashboard"
-    class="screen"
+    class="screen admin-dashboard"
 >
 
-
-    <div class="mission-header">
+    <header class="admin-header">
 
         <div>
 
@@ -103,136 +98,130 @@
                 SPIELLEITER
             </span>
 
-            <h2>
-                Detektiv-Leitstelle
-            </h2>
+            <h1>
+                🕵️ Detektiv-Zentrale
+            </h1>
 
         </div>
 
-        <div class="station-number">
-            🕵️
-        </div>
-
-    </div>
-
-
-
-    <!-- TEAM STATUS -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            👥
-        </div>
-
-        <h2>
-            Team
-        </h2>
-
-        <div class="admin-stat">
-
-            <span>
-                Teamname
-            </span>
-
-            <strong id="adminTeamName">
-                Noch kein Team
-            </strong>
-
-        </div>
-
-
-        <div class="admin-stat">
-
-            <span>
-                Aktuelle Station
-            </span>
-
-            <strong id="adminStation">
-                -
-            </strong>
-
-        </div>
-
-
-        <div class="admin-stat">
-
-            <span>
-                Letzte Antwort
-            </span>
-
-            <strong id="adminAnswer">
-                -
-            </strong>
-
-        </div>
-
-
-        <div class="admin-stat">
-
-            <span>
-                Ergebnis
-            </span>
-
-            <strong id="adminAnswerStatus">
-                ⏳ Wartet
-            </strong>
-
-        </div>
-
-    </div>
-
-
-
-    <!-- AKTUELLE MISSION -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            📜
-        </div>
-
-        <h2>
-            Aktuelle Mission
-        </h2>
-
-        <p id="adminMissionTitle">
-            Keine Mission
-        </p>
-
-        <p id="adminMissionClue">
-            ---
-        </p>
-
-    </div>
-
-
-
-    <!-- NÄCHSTE MISSION -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            🚀
-        </div>
-
-        <h2>
-            Spielsteuerung
-        </h2>
-
-        <p>
-            Hier kannst du den nächsten Hinweis freischalten.
-        </p>
 
         <button
-            class="main-button"
-            id="nextMissionButton"
+            id="logoutButton"
+            class="secondary-button"
         >
-            🔓 Nächsten Hinweis freischalten
+            🚪 Beenden
         </button>
 
+    </header>
+
+
+
+    <!-- =====================================
+         GRUPPEN
+         ===================================== -->
+
+    <div class="admin-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <span class="small-label">
+                    LIVE
+                </span>
+
+                <h2>
+                    👥 Gruppen
+                </h2>
+
+            </div>
+
+
+            <button
+                id="deleteAllGroupsButton"
+                class="danger-button"
+            >
+                🧹 Alle Gruppen löschen
+            </button>
+
+        </div>
+
+
         <div
-            id="adminActionMessage"
+            id="groupsContainer"
+            class="groups-container"
+        >
+
+            <div class="empty-state">
+
+                ⏳ Gruppen werden geladen...
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         NEUE GRUPPE
+         ===================================== -->
+
+    <div class="admin-section">
+
+        <h2>
+            ➕ Neue Gruppe
+        </h2>
+
+
+        <div class="form-grid">
+
+            <div>
+
+                <label>
+                    Teamname
+                </label>
+
+                <input
+                    id="newGroupName"
+                    type="text"
+                    maxlength="30"
+                    placeholder="z. B. Team Adler"
+                >
+
+            </div>
+
+
+            <div>
+
+                <label>
+                    Gruppen-PIN
+                </label>
+
+                <input
+                    id="newGroupPin"
+                    type="text"
+                    inputmode="numeric"
+                    maxlength="8"
+                    placeholder="z. B. 4821"
+                >
+
+            </div>
+
+        </div>
+
+
+        <button
+            id="createGroupButton"
+            class="main-button"
+        >
+            👥 Gruppe erstellen
+        </button>
+
+
+        <div
+            id="groupCreateMessage"
             class="message"
         ></div>
 
@@ -240,31 +229,137 @@
 
 
 
-    <!-- NACHRICHT -->
+    <!-- =====================================
+         MISSION ERSTELLEN
+         ===================================== -->
 
-    <div class="card">
+    <div class="admin-section">
 
-        <div class="card-icon">
-            📢
-        </div>
+        <span class="small-label">
+            NEUE MISSION
+        </span>
 
         <h2>
-            Nachricht an das Team
+            ✏️ Eigenen Hinweis erstellen
         </h2>
 
+
+        <label>
+            Titel
+        </label>
+
         <input
+            id="missionTitleInput"
             type="text"
-            id="adminMessageInput"
-            placeholder="Nachricht an das Team..."
-            maxlength="200"
+            placeholder="z. B. Die geheimnisvolle Spur"
         >
 
-        <button
-            class="main-button"
-            id="sendMessageButton"
+
+        <label>
+            Hinweis
+        </label>
+
+        <textarea
+            id="missionClueInput"
+            rows="4"
+            placeholder="Schreibe hier den Hinweis für die Kinder..."
+        ></textarea>
+
+
+        <label>
+            Aufgabe
+        </label>
+
+        <textarea
+            id="missionTaskInput"
+            rows="4"
+            placeholder="Was sollen die Kinder tun?"
+        ></textarea>
+
+
+        <label>
+            Richtige Lösung
+        </label>
+
+        <input
+            id="missionSolutionInput"
+            type="text"
+            placeholder="z. B. SPIELPLATZ"
         >
-            📡 Nachricht senden
+
+
+        <label>
+            An welche Gruppe senden?
+        </label>
+
+        <select id="missionGroupSelect">
+
+            <option value="">
+                -- Gruppe auswählen --
+            </option>
+
+        </select>
+
+
+        <button
+            id="sendMissionButton"
+            class="main-button"
+        >
+            📡 Hinweis an Gruppe senden
         </button>
+
+
+        <div
+            id="missionSendStatus"
+            class="message"
+        ></div>
+
+    </div>
+
+
+
+    <!-- =====================================
+         NACHRICHT
+         ===================================== -->
+
+    <div class="admin-section">
+
+        <h2>
+            📢 Nachricht senden
+        </h2>
+
+
+        <label>
+            Gruppe
+        </label>
+
+        <select id="messageGroupSelect">
+
+            <option value="">
+                -- Gruppe auswählen --
+            </option>
+
+        </select>
+
+
+        <label>
+            Nachricht
+        </label>
+
+        <textarea
+            id="adminMessageInput"
+            rows="4"
+            placeholder="Nachricht an die Gruppe..."
+        ></textarea>
+
+
+        <button
+            id="sendMessageButton"
+            class="main-button"
+        >
+            📢 Nachricht senden
+        </button>
+
 
         <div
             id="messageStatus"
@@ -275,83 +370,60 @@
 
 
 
-    <!-- SCHNITZELJAGD VERWALTEN -->
+    <!-- =====================================
+         SPIEL BEENDEN
+         ===================================== -->
 
-    <div class="card">
-
-        <div class="card-icon">
-            🛠️
-        </div>
+    <div class="admin-section finish-section">
 
         <h2>
-            Schnitzeljagd verwalten
+            🏆 Spiel
         </h2>
 
-        <p>
-            Später kannst du hier Stationen,
-            Hinweise, Aufgaben und Lösungen
-            direkt über die Website bearbeiten.
-        </p>
+
+        <label>
+            Gruppe auswählen
+        </label>
+
+        <select id="finishGroupSelect">
+
+            <option value="">
+                -- Gruppe auswählen --
+            </option>
+
+        </select>
+
 
         <button
-            class="main-button"
-            id="editMissionsButton"
-        >
-            ✏️ Stationen bearbeiten
-        </button>
-
-    </div>
-
-
-
-    <!-- SPIEL BEENDEN -->
-
-    <div class="card">
-
-        <div class="card-icon">
-            🏆
-        </div>
-
-        <h2>
-            Mission beenden
-        </h2>
-
-        <button
-            class="main-button"
             id="finishGameButton"
+            class="danger-button"
         >
-            🏆 Mission abschließen
+            🏁 Gruppe als abgeschlossen markieren
         </button>
 
-    </div>
 
-
-
-    <!-- ABMELDEN -->
-
-    <div class="card">
-
-        <button
-            class="main-button"
-            id="logoutButton"
-        >
-            🔒 Admin verlassen
-        </button>
+        <div
+            id="finishStatus"
+            class="message"
+        ></div>
 
     </div>
 
 
 </section>
 
-</main>
 
 
-<footer>
-    🔐 Geheime Detektiv-Zentrale
-</footer>
+<script
+    type="module"
+    src="firebase.js"
+></script>
 
+<script
+    type="module"
+    src="admin.js"
+></script>
 
-<script src="admin.js"></script>
 
 </body>
 
