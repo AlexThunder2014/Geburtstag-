@@ -1,17 +1,16 @@
-/* =========================================
-   DETEKTIV-JAGD
-   app.js
-   KINDERBEREICH
-   ========================================= */
+// ============================================
+// DETEKTIV-JAGD
+// KINDERSEITE
+// ============================================
 
-let missions = [];
-let currentMission = 0;
+let database = null;
+let groupId = null;
 let teamName = "";
 
 
-/* =========================================
-   ELEMENTE
-   ========================================= */
+// ============================================
+// ELEMENTE
+// ============================================
 
 const startScreen =
     document.getElementById("startScreen");
@@ -25,11 +24,19 @@ const waitingScreen =
 const finishScreen =
     document.getElementById("finishScreen");
 
+
 const teamInput =
     document.getElementById("teamInput");
 
-const startButton =
-    document.getElementById("startButton");
+const groupPinInput =
+    document.getElementById("groupPinInput");
+
+const joinButton =
+    document.getElementById("joinButton");
+
+const joinMessage =
+    document.getElementById("joinMessage");
+
 
 const teamNameDisplay =
     document.getElementById("teamName");
@@ -46,6 +53,7 @@ const clueText =
 const taskText =
     document.getElementById("taskText");
 
+
 const answerInput =
     document.getElementById("answerInput");
 
@@ -55,13 +63,48 @@ const answerButton =
 const answerMessage =
     document.getElementById("answerMessage");
 
-const gameStatus =
-    document.getElementById("gameStatus");
+
+const adminMessage =
+    document.getElementById("adminMessage");
+
+const connectionStatus =
+    document.getElementById("connectionStatus");
 
 
-/* =========================================
-   BILDSCHIRM WECHSELN
-   ========================================= */
+// ============================================
+// FIREBASE WARTEN
+// ============================================
+
+function waitForFirebase() {
+
+    return new Promise(resolve => {
+
+        const timer =
+            setInterval(() => {
+
+                if (
+                    window.DetektivDB &&
+                    window.DetektivDB.database
+                ) {
+
+                    clearInterval(timer);
+
+                    resolve(
+                        window.DetektivDB
+                    );
+
+                }
+
+            }, 100);
+
+    });
+
+}
+
+
+// ============================================
+// SCREEN WECHSELN
+// ============================================
 
 function showScreen(screen) {
 
@@ -70,231 +113,469 @@ function showScreen(screen) {
         missionScreen,
         waitingScreen,
         finishScreen
-    ].forEach(function(element) {
+    ]
+    .forEach(element => {
 
         if (element) {
-            element.classList.remove("active");
+
+            element.classList.remove(
+                "active"
+            );
+
         }
 
     });
 
+
     if (screen) {
-        screen.classList.add("active");
+
+        screen.classList.add(
+            "active"
+        );
+
     }
 
 }
 
 
-/* =========================================
-   MISSIONEN LADEN
-   ========================================= */
+// ============================================
+// VERBINDUNG
+// ============================================
 
-async function loadMissions() {
+async function initializeConnection() {
 
     try {
 
-        const response =
-            await fetch("missions.json");
+        const Firebase =
+            await waitForFirebase();
 
-        if (!response.ok) {
-            throw new Error(
-                "missions.json konnte nicht geladen werden."
-            );
-        }
+        database =
+            Firebase.database;
 
-        missions =
-            await response.json();
 
-        console.log(
-            "✅ Missionen geladen:",
-            missions
-        );
+        connectionStatus.textContent =
+            "🟢 Online";
+
+        connectionStatus.className =
+            "connection-status online";
+
+
+        restoreSession();
 
     } catch (error) {
 
         console.error(error);
 
-        if (clueText) {
+        connectionStatus.textContent =
+            "🔴 Keine Verbindung";
 
-            clueText.textContent =
-                "⚠️ Die Missionen konnten nicht geladen werden.";
-
-        }
-
-        if (startButton) {
-
-            startButton.disabled = true;
-
-        }
+        connectionStatus.className =
+            "connection-status offline";
 
     }
 
 }
 
 
-/* =========================================
-   SPIEL STARTEN
-   ========================================= */
-
-if (startButton) {
-
-    startButton.addEventListener(
-        "click",
-        startGame
-    );
-
-}
+initializeConnection();
 
 
-if (teamInput) {
+// ============================================
+// GRUPPE BEITRETEN
+// ============================================
 
-    teamInput.addEventListener(
-        "keydown",
-        function(event) {
+joinButton.addEventListener(
+    "click",
+    joinGroup
+);
 
-            if (event.key === "Enter") {
-                startGame();
-            }
+
+groupPinInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+
+            joinGroup();
 
         }
-    );
 
-}
-
-
-function startGame() {
-
-    const name =
-        teamInput.value.trim();
-
-    if (!name) {
-
-        alert(
-            "🔎 Bitte gebt zuerst euren Teamnamen ein."
-        );
-
-        teamInput.focus();
-
-        return;
     }
+);
 
-    if (missions.length === 0) {
 
-        alert(
-            "⚠️ Die Missionen sind noch nicht geladen."
-        );
+teamInput.addEventListener(
+    "keydown",
+    event => {
 
-        return;
+        if (event.key === "Enter") {
+
+            groupPinInput.focus();
+
+        }
+
     }
+);
+
+
+async function joinGroup() {
 
     teamName =
-        name;
+        teamInput.value.trim();
 
-    currentMission =
-        0;
-
-    localStorage.setItem(
-        "detektivTeamName",
-        teamName
-    );
-
-    localStorage.setItem(
-        "detektivMission",
-        currentMission
-    );
-
-    localStorage.removeItem(
-        "detektivFinished"
-    );
-
-    teamNameDisplay.textContent =
-        teamName;
-
-    showMission();
-
-}
+    const pin =
+        groupPinInput.value.trim();
 
 
-/* =========================================
-   MISSION ANZEIGEN
-   ========================================= */
+    if (!teamName) {
 
-function showMission() {
-
-    if (
-        currentMission < 0 ||
-        currentMission >= missions.length
-    ) {
-
-        finishGame();
+        showJoinError(
+            "❌ Bitte einen Teamnamen eingeben."
+        );
 
         return;
-    }
-
-    const mission =
-        missions[currentMission];
-
-    missionTitle.textContent =
-        mission.title;
-
-    stationNumber.textContent =
-        currentMission + 1;
-
-    clueText.textContent =
-        mission.clue;
-
-    taskText.textContent =
-        mission.task;
-
-    answerInput.value =
-        "";
-
-    answerMessage.className =
-        "message";
-
-    answerMessage.textContent =
-        "";
-
-    if (gameStatus) {
-
-        gameStatus.textContent =
-            "Ihr könnt eure Lösung eingeben.";
 
     }
 
-    answerButton.disabled =
-        false;
 
-    showScreen(
-        missionScreen
-    );
+    if (!pin) {
 
-}
+        showJoinError(
+            "❌ Bitte die Gruppen-PIN eingeben."
+        );
 
+        return;
 
-/* =========================================
-   ANTWORT PRÜFEN
-   ========================================= */
-
-if (answerButton) {
-
-    answerButton.addEventListener(
-        "click",
-        checkAnswer
-    );
-
-}
+    }
 
 
-if (answerInput) {
+    if (!database) {
 
-    answerInput.addEventListener(
-        "keydown",
-        function(event) {
+        showJoinError(
+            "❌ Die Verbindung ist noch nicht bereit."
+        );
 
-            if (event.key === "Enter") {
-                checkAnswer();
+        return;
+
+    }
+
+
+    joinButton.disabled =
+        true;
+
+
+    try {
+
+        const Firebase =
+            window.DetektivDB;
+
+
+        const groupsRef =
+            Firebase.ref(
+                database,
+                "groups"
+            );
+
+
+        const snapshot =
+            await Firebase.get(
+                groupsRef
+            );
+
+
+        const groups =
+            snapshot.val() || {};
+
+
+        let foundGroup =
+            null;
+
+
+        for (
+            const id in groups
+        ) {
+
+            const group =
+                groups[id];
+
+
+            if (
+                String(group.pin) ===
+                String(pin) &&
+                group.deleted !== true
+            ) {
+
+                foundGroup = {
+                    id,
+                    data: group
+                };
+
+                break;
+
             }
+
+        }
+
+
+        if (!foundGroup) {
+
+            showJoinError(
+                "❌ Diese Gruppen-PIN gibt es nicht."
+            );
+
+            joinButton.disabled =
+                false;
+
+            return;
+
+        }
+
+
+        groupId =
+            foundGroup.id;
+
+
+        await Firebase.update(
+
+            Firebase.ref(
+                database,
+                "groups/" + groupId
+            ),
+
+            {
+
+                teamName:
+                    teamName,
+
+                online:
+                    true,
+
+                lastSeen:
+                    Date.now()
+
+            }
+
+        );
+
+
+        sessionStorage.setItem(
+            "detektivGroupId",
+            groupId
+        );
+
+
+        sessionStorage.setItem(
+            "detektivTeamName",
+            teamName
+        );
+
+
+        teamNameDisplay.textContent =
+            teamName;
+
+
+        joinMessage.textContent =
+            "✅ Gruppe verbunden!";
+
+
+        joinMessage.className =
+            "message success";
+
+
+        listenToGroup();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        showJoinError(
+            "⚠️ Verbindung zur Zentrale fehlgeschlagen."
+        );
+
+        joinButton.disabled =
+            false;
+
+    }
+
+}
+
+
+// ============================================
+// SESSION WIEDERHERSTELLEN
+// ============================================
+
+async function restoreSession() {
+
+    const savedGroup =
+        sessionStorage.getItem(
+            "detektivGroupId"
+        );
+
+    const savedTeam =
+        sessionStorage.getItem(
+            "detektivTeamName"
+        );
+
+
+    if (
+        !savedGroup ||
+        !savedTeam
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        const Firebase =
+            window.DetektivDB;
+
+
+        const groupRef =
+            Firebase.ref(
+                database,
+                "groups/" + savedGroup
+            );
+
+
+        const snapshot =
+            await Firebase.get(
+                groupRef
+            );
+
+
+        if (
+            !snapshot.exists()
+        ) {
+
+            sessionStorage.clear();
+
+            return;
+
+        }
+
+
+        const group =
+            snapshot.val();
+
+
+        if (
+            group.deleted === true
+        ) {
+
+            sessionStorage.clear();
+
+            return;
+
+        }
+
+
+        groupId =
+            savedGroup;
+
+        teamName =
+            savedTeam;
+
+
+        teamInput.value =
+            savedTeam;
+
+        groupPinInput.value =
+            group.pin || "";
+
+
+        teamNameDisplay.textContent =
+            savedTeam;
+
+
+        await Firebase.update(
+            groupRef,
+            {
+
+                online:
+                    true,
+
+                lastSeen:
+                    Date.now()
+
+            }
+        );
+
+
+        listenToGroup();
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+// ============================================
+// GRUPPE LIVE ANHÖREN
+// ============================================
+
+function listenToGroup() {
+
+    const Firebase =
+        window.DetektivDB;
+
+
+    const groupRef =
+        Firebase.ref(
+            database,
+            "groups/" + groupId
+        );
+
+
+    Firebase.onValue(
+        groupRef,
+        snapshot => {
+
+            const group =
+                snapshot.val();
+
+
+            if (!group) {
+
+                alert(
+                    "❌ Diese Gruppe wurde gelöscht."
+                );
+
+
+                sessionStorage.clear();
+
+                location.reload();
+
+                return;
+
+            }
+
+
+            if (
+                group.deleted === true
+            ) {
+
+                alert(
+                    "❌ Diese Gruppe wurde vom Spielleiter gelöscht."
+                );
+
+
+                sessionStorage.clear();
+
+                location.reload();
+
+                return;
+
+            }
+
+
+            updateFromGroup(group);
 
         }
     );
@@ -302,20 +583,145 @@ if (answerInput) {
 }
 
 
-function normalizeAnswer(value) {
+// ============================================
+// GRUPPENDATEN VERARBEITEN
+// ============================================
 
-    return String(value)
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ");
+function updateFromGroup(group) {
+
+    if (group.teamName) {
+
+        teamNameDisplay.textContent =
+            group.teamName;
+
+    }
+
+
+    if (group.finished === true) {
+
+        showScreen(
+            finishScreen
+        );
+
+        return;
+
+    }
+
+
+    const mission =
+        group.currentMission;
+
+
+    if (
+        !mission ||
+        mission.active !== true
+    ) {
+
+        showScreen(
+            waitingScreen
+        );
+
+    } else {
+
+        missionTitle.textContent =
+            mission.title || "Mission";
+
+
+        stationNumber.textContent =
+            mission.station || "—";
+
+
+        clueText.textContent =
+            mission.clue || "";
+
+
+        taskText.textContent =
+            mission.task || "";
+
+
+        showScreen(
+            missionScreen
+        );
+
+    }
+
+
+    if (group.adminMessage) {
+
+        adminMessage.textContent =
+            group.adminMessage;
+
+    } else {
+
+        adminMessage.textContent =
+            "Keine neue Nachricht.";
+
+    }
+
+
+    if (group.answer) {
+
+        if (
+            group.answer.correct === true
+        ) {
+
+            answerMessage.className =
+                "message success";
+
+            answerMessage.textContent =
+                "✅ Eure Lösung war richtig!";
+
+        }
+
+        if (
+            group.answer.correct === false
+        ) {
+
+            answerMessage.className =
+                "message error";
+
+            answerMessage.textContent =
+                "❌ Noch nicht richtig. Versucht es erneut.";
+
+            answerButton.disabled =
+                false;
+
+        }
+
+    }
 
 }
 
 
-function checkAnswer() {
+// ============================================
+// LÖSUNG ABSCHICKEN
+// ============================================
+
+answerButton.addEventListener(
+    "click",
+    sendAnswer
+);
+
+
+answerInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+
+            sendAnswer();
+
+        }
+
+    }
+);
+
+
+async function sendAnswer() {
 
     const answer =
         answerInput.value.trim();
+
 
     if (!answer) {
 
@@ -323,225 +729,121 @@ function checkAnswer() {
             "message error";
 
         answerMessage.textContent =
-            "🔎 Bitte gebt eine Lösung ein.";
+            "❌ Bitte eine Lösung eingeben.";
 
         return;
+
     }
 
-    const mission =
-        missions[currentMission];
 
-    const correctAnswer =
-        normalizeAnswer(
-            mission.answer
+    if (!groupId) {
+
+        return;
+
+    }
+
+
+    const Firebase =
+        window.DetektivDB;
+
+
+    try {
+
+        const missionRef =
+            Firebase.ref(
+                database,
+                "groups/" +
+                groupId +
+                "/currentMission"
+            );
+
+
+        const snapshot =
+            await Firebase.get(
+                missionRef
+            );
+
+
+        const mission =
+            snapshot.val();
+
+
+        if (!mission) {
+
+            return;
+
+        }
+
+
+        await Firebase.set(
+
+            Firebase.ref(
+                database,
+                "groups/" +
+                groupId +
+                "/answer"
+            ),
+
+            {
+
+                text:
+                    answer,
+
+                correct:
+                    null,
+
+                station:
+                    mission.station,
+
+                time:
+                    Date.now()
+
+            }
+
         );
 
-    const playerAnswer =
-        normalizeAnswer(
-            answer
-        );
 
+        answerButton.disabled =
+            true;
 
-    if (
-        playerAnswer === correctAnswer
-    ) {
 
         answerMessage.className =
             "message success";
 
         answerMessage.textContent =
-            "✅ Richtig!";
+            "📡 Antwort wurde abgeschickt.";
 
-        answerButton.disabled =
-            true;
 
-        localStorage.setItem(
-            "detektivAnswer",
-            answer
+        showScreen(
+            waitingScreen
         );
 
-        localStorage.setItem(
-            "detektivAnswerCorrect",
-            "true"
-        );
 
-        localStorage.setItem(
-            "detektivAnswerTime",
-            new Date().toISOString()
-        );
+    } catch (error) {
 
-        if (gameStatus) {
-
-            gameStatus.textContent =
-                "✅ Lösung richtig. Der Spielleiter wurde informiert.";
-
-        }
-
-        setTimeout(
-            showWaitingScreen,
-            1200
-        );
-
-    } else {
+        console.error(error);
 
         answerMessage.className =
             "message error";
 
         answerMessage.textContent =
-            "❌ Leider falsch. Versucht es noch einmal.";
-
-        localStorage.setItem(
-            "detektivAnswer",
-            answer
-        );
-
-        localStorage.setItem(
-            "detektivAnswerCorrect",
-            "false"
-        );
+            "⚠️ Antwort konnte nicht gesendet werden.";
 
     }
 
 }
 
 
-/* =========================================
-   WARTESCHIRM
-   ========================================= */
+// ============================================
+// FEHLER
+// ============================================
 
-function showWaitingScreen() {
+function showJoinError(text) {
 
-    showScreen(
-        waitingScreen
-    );
+    joinMessage.className =
+        "message error";
 
-}
-
-
-/* =========================================
-   NÄCHSTE MISSION
-   ========================================= */
-
-function nextMission() {
-
-    currentMission++;
-
-    localStorage.setItem(
-        "detektivMission",
-        currentMission
-    );
-
-    localStorage.removeItem(
-        "detektivAnswer"
-    );
-
-    localStorage.removeItem(
-        "detektivAnswerCorrect"
-    );
-
-    if (
-        currentMission >= missions.length
-    ) {
-
-        finishGame();
-
-        return;
-    }
-
-    showMission();
+    joinMessage.textContent =
+        text;
 
 }
-
-
-/* =========================================
-   SPIEL BEENDEN
-   ========================================= */
-
-function finishGame() {
-
-    localStorage.setItem(
-        "detektivFinished",
-        "true"
-    );
-
-    showScreen(
-        finishScreen
-    );
-
-}
-
-
-/* =========================================
-   SPIELSTAND LADEN
-   ========================================= */
-
-function restoreGame() {
-
-    const savedTeam =
-        localStorage.getItem(
-            "detektivTeamName"
-        );
-
-    const savedMission =
-        localStorage.getItem(
-            "detektivMission"
-        );
-
-    const finished =
-        localStorage.getItem(
-            "detektivFinished"
-        );
-
-
-    if (savedTeam) {
-
-        teamName =
-            savedTeam;
-
-        teamNameDisplay.textContent =
-            teamName;
-
-        teamInput.value =
-            teamName;
-
-    }
-
-
-    if (
-        savedMission !== null
-    ) {
-
-        currentMission =
-            parseInt(
-                savedMission,
-                10
-            );
-
-    }
-
-
-    if (
-        finished === "true"
-    ) {
-
-        finishGame();
-
-    }
-
-}
-
-
-/* =========================================
-   START
-   ========================================= */
-
-async function init() {
-
-    await loadMissions();
-
-    restoreGame();
-
-}
-
-
-init();
