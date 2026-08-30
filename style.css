@@ -1,484 +1,849 @@
-/* =========================================
+/* ============================================
    DETEKTIV-JAGD
-   style.css
-   ========================================= */
+   DESIGN
+   ============================================ */
 
 * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
-:root {
-    --bg: #070b14;
-    --bg2: #0d1424;
-    --card: rgba(255, 255, 255, 0.07);
-    --card-border: rgba(255, 255, 255, 0.12);
-    --text: #f4f7ff;
-    --muted: #9ca8bd;
-    --accent: #5ee7ff;
-    --accent2: #8b5cf6;
-    --success: #4ade80;
-    --danger: #fb7185;
+
+html {
+    min-height: 100%;
 }
+
 
 body {
+
+    margin: 0;
+
     min-height: 100vh;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #f8fafc;
+
     background:
-        radial-gradient(circle at 20% 10%, rgba(94, 231, 255, 0.12), transparent 30%),
-        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.14), transparent 30%),
-        linear-gradient(135deg, var(--bg), var(--bg2));
+        radial-gradient(
+            circle at top,
+            #243b64 0%,
+            #111827 45%,
+            #050814 100%
+        );
 
-    color: var(--text);
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-/* =========================================
-   TOPBAR
-   ========================================= */
-
-.topbar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-
-    min-height: 70px;
-    padding: 15px 25px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background: rgba(7, 11, 20, 0.82);
-    backdrop-filter: blur(18px);
-
-    border-bottom: 1px solid var(--card-border);
-}
-
-.logo {
-    font-size: 1.2rem;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.team {
-    color: var(--muted);
-}
-
-.team strong {
-    color: var(--accent);
 }
 
 
-/* =========================================
-   MAIN
-   ========================================= */
+button,
+input,
+textarea,
+select {
 
-main {
-    width: 100%;
-    max-width: 900px;
+    font: inherit;
 
-    margin: 0 auto;
-    padding: 35px 20px 60px;
 }
 
 
-/* =========================================
-   SCREENS
-   ========================================= */
-
-.screen {
-    display: none;
-}
-
-.screen.active {
-    display: block;
-}
-
-
-/* =========================================
-   CARDS
-   ========================================= */
-
-.card {
-    margin-bottom: 22px;
-    padding: 28px;
-
-    background: var(--card);
-
-    border: 1px solid var(--card-border);
-    border-radius: 24px;
-
-    backdrop-filter: blur(20px);
-
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.25);
-
-    animation: cardAppear 0.45s ease;
-}
-
-.hero-card {
-    text-align: center;
-    padding: 55px 30px;
-}
-
-@keyframes cardAppear {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-
-/* =========================================
-   ICONS
-   ========================================= */
-
-.big-icon {
-    font-size: 5rem;
-    margin-bottom: 20px;
-
-    filter: drop-shadow(0 0 25px rgba(94, 231, 255, 0.35));
-}
-
-.card-icon {
-    font-size: 2rem;
-    margin-bottom: 10px;
-}
-
-
-/* =========================================
-   TEXT
-   ========================================= */
-
-h1 {
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    margin-bottom: 15px;
-}
-
-h2 {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-}
-
-p {
-    color: var(--muted);
-    line-height: 1.7;
-}
-
-.small-label {
-    display: block;
-
-    color: var(--accent);
-    font-size: 0.75rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-
-    margin-bottom: 6px;
-}
-
-
-/* =========================================
-   INPUT
-   ========================================= */
-
-input {
-    width: 100%;
-
-    margin-top: 18px;
-    padding: 16px 18px;
-
-    border-radius: 14px;
-    border: 1px solid var(--card-border);
-
-    background: rgba(0, 0, 0, 0.3);
-
-    color: white;
-    font-size: 1rem;
-
-    outline: none;
-
-    transition:
-        border 0.2s,
-        box-shadow 0.2s;
-}
-
-input::placeholder {
-    color: #718096;
-}
-
-input:focus {
-    border-color: var(--accent);
-
-    box-shadow:
-        0 0 0 3px rgba(94, 231, 255, 0.12);
-}
-
-
-/* =========================================
-   BUTTON
-   ========================================= */
-
-.main-button {
-    width: 100%;
-
-    margin-top: 16px;
-    padding: 16px 20px;
-
-    border: none;
-    border-radius: 14px;
-
-    background: linear-gradient(
-        135deg,
-        var(--accent),
-        var(--accent2)
-    );
-
-    color: white;
-
-    font-size: 1rem;
-    font-weight: 800;
+button {
 
     cursor: pointer;
 
-    transition:
-        transform 0.2s,
-        box-shadow 0.2s,
-        filter 0.2s;
-}
-
-.main-button:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 10px 30px rgba(94, 231, 255, 0.2);
-
-    filter: brightness(1.1);
-}
-
-.main-button:active {
-    transform: scale(0.98);
 }
 
 
-/* =========================================
-   MISSION HEADER
-   ========================================= */
+button:disabled {
 
-.mission-header {
+    opacity: 0.5;
+
+    cursor: not-allowed;
+
+}
+
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.topbar {
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 50;
+
     display: flex;
-    align-items: center;
+
     justify-content: space-between;
 
-    margin-bottom: 22px;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px 24px;
+
+    background:
+        rgba(15, 23, 42, 0.88);
+
+    backdrop-filter:
+        blur(15px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,0.1);
+
 }
 
-.station-number {
-    width: 55px;
-    height: 55px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.logo {
 
-    border-radius: 50%;
+    font-size: 20px;
 
-    background: linear-gradient(
-        135deg,
-        var(--accent),
-        var(--accent2)
+    font-weight: 800;
+
+}
+
+
+.connection-status {
+
+    font-size: 13px;
+
+    opacity: 0.8;
+
+}
+
+
+.connection-status.online {
+
+    color: #86efac;
+
+}
+
+
+.connection-status.offline {
+
+    color: #fca5a5;
+
+}
+
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+
+main {
+
+    width: min(
+        900px,
+        calc(100% - 30px)
     );
 
-    font-size: 1.4rem;
-    font-weight: 900;
+    margin: 40px auto;
 
-    box-shadow:
-        0 0 30px rgba(94, 231, 255, 0.25);
 }
 
 
-/* =========================================
-   CLUE
-   ========================================= */
+.screen {
 
-.clue-card {
-    border-color: rgba(94, 231, 255, 0.25);
-}
-
-#clueText {
-    font-size: 1.15rem;
-    color: white;
-}
-
-
-/* =========================================
-   ANSWER MESSAGE
-   ========================================= */
-
-.message {
     display: none;
 
-    margin-top: 15px;
-    padding: 14px;
+}
 
-    border-radius: 12px;
+
+.screen.active {
+
+    display: block;
+
+}
+
+
+/* ============================================
+   CARD
+   ============================================ */
+
+.card {
+
+    padding: 28px;
+
+    margin-bottom: 22px;
+
+    background:
+        rgba(255,255,255,0.075);
+
+    border:
+        1px solid rgba(255,255,255,0.12);
+
+    border-radius: 24px;
+
+    backdrop-filter:
+        blur(18px);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,0.25);
+
+}
+
+
+.hero-card {
+
+    max-width: 600px;
+
+    margin:
+        60px auto;
 
     text-align: center;
-    font-weight: bold;
+
 }
 
-.message.success {
+
+.big-icon {
+
+    font-size: 64px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.card-icon {
+
+    font-size: 34px;
+
+    margin-bottom: 8px;
+
+}
+
+
+/* ============================================
+   TEXT
+   ============================================ */
+
+h1 {
+
+    margin-top: 0;
+
+    font-size: clamp(
+        28px,
+        5vw,
+        46px
+    );
+
+}
+
+
+h2 {
+
+    margin-top: 0;
+
+}
+
+
+h3 {
+
+    margin: 0;
+
+}
+
+
+p {
+
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+
+}
+
+
+.small-label {
+
     display: block;
 
-    background: rgba(74, 222, 128, 0.12);
-    border: 1px solid rgba(74, 222, 128, 0.3);
+    font-size: 11px;
 
-    color: var(--success);
+    letter-spacing: 2px;
+
+    opacity: 0.65;
+
+    margin-bottom: 5px;
+
 }
 
-.message.error {
+
+/* ============================================
+   INPUTS
+   ============================================ */
+
+label {
+
     display: block;
 
-    background: rgba(251, 113, 133, 0.12);
-    border: 1px solid rgba(251, 113, 133, 0.3);
+    text-align: left;
 
-    color: var(--danger);
+    margin:
+        16px 0 7px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
 }
 
 
-/* =========================================
-   MAP
-   ========================================= */
+input,
+textarea,
+select {
 
-#map {
-    min-height: 250px;
+    width: 100%;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 15px 16px;
 
-    margin-top: 15px;
+    color: #fff;
 
-    border-radius: 18px;
+    background:
+        rgba(0,0,0,0.25);
+
+    border:
+        1px solid rgba(255,255,255,0.16);
+
+    border-radius: 14px;
+
+    outline: none;
+
+}
+
+
+textarea {
+
+    resize: vertical;
+
+    min-height: 100px;
+
+}
+
+
+input:focus,
+textarea:focus,
+select:focus {
+
+    border-color:
+        rgba(255,255,255,0.5);
+
+}
+
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+
+.main-button {
+
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 15px 20px;
+
+    border: 0;
+
+    border-radius: 15px;
+
+    color: white;
+
+    font-weight: 800;
 
     background:
         linear-gradient(
             135deg,
-            rgba(94, 231, 255, 0.06),
-            rgba(139, 92, 246, 0.08)
+            #2563eb,
+            #7c3aed
         );
 
-    border: 1px solid var(--card-border);
+    box-shadow:
+        0 10px 30px
+        rgba(37,99,235,0.25);
 
-    color: var(--muted);
 }
 
 
-/* =========================================
-   WAITING SCREEN
-   ========================================= */
+.main-button:hover {
 
-.waiting-animation {
-    margin-top: 30px;
+    transform:
+        translateY(-1px);
 
-    font-size: 3rem;
-
-    animation: detectiveFloat 2s ease-in-out infinite;
-}
-
-@keyframes detectiveFloat {
-    0%, 100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-12px);
-    }
 }
 
 
-/* =========================================
-   FINAL
-   ========================================= */
+.secondary-button,
+.small-button,
+.danger-button {
 
-.final-message {
-    margin-top: 25px;
+    padding: 11px 15px;
 
-    padding: 18px;
+    border-radius: 12px;
+
+    border:
+        1px solid rgba(255,255,255,0.14);
+
+    color: white;
+
+    background:
+        rgba(255,255,255,0.08);
+
+}
+
+
+.danger-button {
+
+    background:
+        rgba(220,38,38,0.2);
+
+    border-color:
+        rgba(248,113,113,0.3);
+
+}
+
+
+.danger-button.small {
+
+    padding: 8px 11px;
+
+}
+
+
+/* ============================================
+   MISSION
+   ============================================ */
+
+.team-bar {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 15px 18px;
+
+    margin-bottom: 20px;
 
     border-radius: 15px;
 
-    background: rgba(74, 222, 128, 0.1);
+    background:
+        rgba(255,255,255,0.08);
 
-    border: 1px solid rgba(74, 222, 128, 0.25);
-
-    color: var(--success);
-
-    font-weight: bold;
 }
 
 
-/* =========================================
-   FOOTER
-   ========================================= */
+.mission-header {
 
-footer {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.station-number {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 65px;
+
+    height: 65px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #7c3aed
+        );
+
+    font-size: 25px;
+
+    font-weight: 900;
+
+}
+
+
+.clue-card {
+
+    border:
+        1px solid
+        rgba(250,204,21,0.25);
+
+}
+
+
+/* ============================================
+   MESSAGES
+   ============================================ */
+
+.message {
+
+    min-height: 20px;
+
+    margin-top: 14px;
+
+    padding: 0;
+
+    border-radius: 12px;
+
+    font-weight: 700;
+
+}
+
+
+.message.success {
+
+    padding: 12px;
+
+    background:
+        rgba(34,197,94,0.15);
+
+    color: #86efac;
+
+}
+
+
+.message.error {
+
+    padding: 12px;
+
+    background:
+        rgba(239,68,68,0.15);
+
+    color: #fca5a5;
+
+}
+
+
+/* ============================================
+   ADMIN
+   ============================================ */
+
+.admin-dashboard {
+
+    width: min(
+        1100px,
+        calc(100% - 30px)
+    );
+
+    margin: 30px auto;
+
+}
+
+
+.admin-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+
+}
+
+
+.admin-section {
+
+    margin-bottom: 25px;
+
     padding: 25px;
+
+    border-radius: 22px;
+
+    background:
+        rgba(255,255,255,0.07);
+
+    border:
+        1px solid rgba(255,255,255,0.1);
+
+    backdrop-filter:
+        blur(15px);
+
+}
+
+
+.section-heading {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.form-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0,1fr)
+        );
+
+    gap: 15px;
+
+}
+
+
+/* ============================================
+   GRUPPEN
+   ============================================ */
+
+.groups-container {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px,1fr)
+        );
+
+    gap: 15px;
+
+}
+
+
+.group-card {
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(0,0,0,0.2);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.1);
+
+}
+
+
+.group-card-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+}
+
+
+.group-pin {
+
+    display: inline-block;
+
+    margin-top: 7px;
+
+    opacity: 0.65;
+
+    font-size: 13px;
+
+}
+
+
+.status-online {
+
+    color: #86efac;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+
+}
+
+
+.status-offline {
+
+    color: #fca5a5;
+
+    white-space: nowrap;
+
+    font-size: 13px;
+
+}
+
+
+.group-info {
+
+    margin-top: 18px;
+
+    display: grid;
+
+    gap: 9px;
+
+    font-size: 14px;
+
+}
+
+
+.group-actions {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 18px;
+
+}
+
+
+.empty-state {
+
+    padding: 35px;
 
     text-align: center;
 
-    color: #667085;
-    font-size: 0.85rem;
+    opacity: 0.65;
+
 }
 
 
-/* =========================================
-   MOBILE
-   ========================================= */
+/* ============================================
+   FOOTER
+   ============================================ */
 
-@media (max-width: 600px) {
+footer {
+
+    padding: 30px;
+
+    text-align: center;
+
+    opacity: 0.5;
+
+}
+
+
+.admin-access {
+
+    position: fixed;
+
+    right: 15px;
+
+    bottom: 15px;
+
+    z-index: 100;
+
+}
+
+
+.admin-access button {
+
+    padding: 10px 14px;
+
+    color: white;
+
+    background:
+        rgba(15,23,42,0.85);
+
+    border:
+        1px solid
+        rgba(255,255,255,0.15);
+
+    border-radius: 12px;
+
+}
+
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 650px) {
 
     .topbar {
-        padding: 13px 16px;
+
+        padding: 14px;
+
     }
+
 
     .logo {
-        font-size: 0.95rem;
+
+        font-size: 16px;
+
     }
 
-    .team {
-        font-size: 0.8rem;
-    }
 
     main {
-        padding: 25px 14px 50px;
+
+        margin-top: 25px;
+
     }
+
 
     .card {
-        padding: 22px 18px;
-        border-radius: 20px;
+
+        padding: 21px;
+
+        border-radius: 19px;
+
     }
 
-    .hero-card {
-        padding: 40px 20px;
+
+    .form-grid {
+
+        grid-template-columns: 1fr;
+
     }
 
-    .big-icon {
-        font-size: 4rem;
+
+    .admin-header {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
     }
 
-    .mission-header h2 {
-        font-size: 1.3rem;
+
+    .section-heading {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
     }
 
-    .station-number {
-        width: 48px;
-        height: 48px;
-        font-size: 1.1rem;
+
+    .mission-header {
+
+        align-items: flex-start;
+
     }
+
 }
