@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,101 +8,284 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta
-        name="theme-color"
-        content="#111827"
-    >
+    <title>Detektiv-Jagd</title>
 
-    <title>🕵️ Detektiv-Jagd</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
 
+            background:
+                radial-gradient(
+                    circle at top,
+                    #243b55 0%,
+                    #141e30 45%,
+                    #080d14 100%
+                );
+
+            color: white;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            border-radius: 28px;
+
+            padding: 35px 25px;
+
+            text-align: center;
+
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .logo {
+            font-size: 70px;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #cbd5e1;
+            font-size: 17px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 17px;
+
+            border-radius: 14px;
+
+            border: 1px solid rgba(255, 255, 255, 0.18);
+
+            background: rgba(0, 0, 0, 0.25);
+
+            color: white;
+
+            font-size: 17px;
+
+            outline: none;
+        }
+
+        input::placeholder {
+            color: #aeb8c6;
+        }
+
+        input:focus {
+            border-color: #60a5fa;
+
+            box-shadow:
+                0 0 0 3px rgba(96, 165, 250, 0.15);
+        }
+
+        button {
+            width: 100%;
+
+            padding: 17px;
+
+            border: none;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #7c3aed
+                );
+
+            color: white;
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.2s,
+                opacity 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .connection-status {
+            margin-top: 22px;
+
+            padding: 10px 14px;
+
+            border-radius: 12px;
+
+            background: rgba(0, 0, 0, 0.2);
+
+            color: #facc15;
+
+            font-size: 14px;
+        }
+
+        .connection-status.online {
+            color: #4ade80;
+        }
+
+        .connection-status.offline {
+            color: #f87171;
+        }
+
+        .message {
+            margin-top: 18px;
+
+            padding: 14px;
+
+            border-radius: 12px;
+
+            white-space: pre-wrap;
+
+            font-size: 15px;
+
+            line-height: 1.5;
+        }
+
+        .message.error {
+            background: rgba(239, 68, 68, 0.15);
+
+            border: 1px solid rgba(239, 68, 68, 0.35);
+
+            color: #fca5a5;
+        }
+
+        .message.success {
+            background: rgba(34, 197, 94, 0.15);
+
+            border: 1px solid rgba(34, 197, 94, 0.35);
+
+            color: #86efac;
+        }
+
+        .hint {
+            margin-top: 25px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+        }
+
+        .admin-link {
+            margin-top: 25px;
+        }
+
+        .admin-link a {
+            color: #94a3b8;
+
+            text-decoration: none;
+
+            font-size: 13px;
+        }
+
+        .admin-link a:hover {
+            color: white;
+        }
+    </style>
 </head>
-
 
 <body>
 
+    <main class="container">
 
-<header class="topbar">
-
-    <div class="logo">
-        🕵️ Detektiv-Jagd
-    </div>
-
-    <div
-        id="connectionStatus"
-        class="connection-status"
-    >
-        🔴 Verbindung wird hergestellt...
-    </div>
-
-</header>
-
-
-<main>
-
-
-<!-- =========================================
-     START
-     ========================================= -->
-
-<section
-    id="startScreen"
-    class="screen active"
->
-
-    <div class="card hero-card">
-
-        <div class="big-icon">
-            🔎
+        <div class="logo">
+            🕵️
         </div>
 
         <h1>
-            Willkommen, Detektive!
+            Willkommen Detektive
         </h1>
 
-        <p>
-            Gebt euren Teamnamen und eure
-            Gruppen-PIN ein.
+        <p class="subtitle">
+            Gebt euren Teamnamen und euren
+            Gruppen-PIN ein, um die Detektiv-Jagd
+            zu starten.
         </p>
 
 
-        <label for="teamInput">
-            Teamname
-        </label>
+        <div class="form">
 
-        <input
-            id="teamInput"
-            type="text"
-            maxlength="30"
-            placeholder="z. B. Team Adler"
-            autocomplete="off"
+            <input
+                id="teamInput"
+                type="text"
+                placeholder="👥 Teamname"
+                autocomplete="off"
+            >
+
+            <input
+                id="groupPinInput"
+                type="text"
+                inputmode="numeric"
+                placeholder="🔐 Gruppen-PIN"
+                autocomplete="off"
+            >
+
+            <button
+                id="joinButton"
+                type="button"
+            >
+                🔎 Gruppe betreten
+            </button>
+
+        </div>
+
+
+        <div
+            id="connectionStatus"
+            class="connection-status"
         >
-
-
-        <label for="groupPinInput">
-            Gruppen-PIN
-        </label>
-
-        <input
-            id="groupPinInput"
-            type="text"
-            inputmode="numeric"
-            maxlength="8"
-            placeholder="PIN"
-            autocomplete="off"
-        >
-
-
-        <button
-            id="joinButton"
-            class="main-button"
-        >
-            🚀 Gruppe betreten
-        </button>
+            🟡 Verbindung zur Zentrale wird hergestellt...
+        </div>
 
 
         <div
@@ -112,255 +293,32 @@
             class="message"
         ></div>
 
-    </div>
 
-</section>
-
-
-
-<!-- =========================================
-     MISSION
-     ========================================= -->
-
-<section
-    id="missionScreen"
-    class="screen"
->
-
-    <div class="team-bar">
-
-        <span>
-            👥 Team
-        </span>
-
-        <strong id="teamName">
-            ---
-        </strong>
-
-    </div>
-
-
-    <div class="mission-header">
-
-        <div>
-
-            <span class="small-label">
-                AKTUELLE MISSION
-            </span>
-
-            <h1 id="missionTitle">
-                ---
-            </h1>
-
-        </div>
-
-
-        <div class="station-number">
-
-            <span id="stationNumber">
-                —
-            </span>
-
-        </div>
-
-    </div>
-
-
-
-    <div class="card clue-card">
-
-        <div class="card-icon">
-            📜
-        </div>
-
-        <h2>
-            Geheimer Hinweis
-        </h2>
-
-        <p id="clueText">
-            ---
-        </p>
-
-    </div>
-
-
-
-    <div class="card">
-
-        <div class="card-icon">
-            🧩
-        </div>
-
-        <h2>
-            Eure Aufgabe
-        </h2>
-
-        <p id="taskText">
-            ---
+        <p class="hint">
+            💡 Euer Spielleiter gibt euch
+            den Gruppen-PIN.
         </p>
 
 
-        <label for="answerInput">
-            Eure Lösung
-        </label>
-
-        <input
-            id="answerInput"
-            type="text"
-            placeholder="Lösung eingeben..."
-            autocomplete="off"
-        >
-
-
-        <button
-            id="answerButton"
-            class="main-button"
-        >
-            📡 Lösung abschicken
-        </button>
-
-
-        <div
-            id="answerMessage"
-            class="message"
-        ></div>
-
-    </div>
-
-
-
-    <div class="card">
-
-        <div class="card-icon">
-            📢
+        <div class="admin-link">
+            <a href="admin.html">
+                ⚙️ Spielleiter-Bereich
+            </a>
         </div>
 
-        <h2>
-            Nachricht vom Spielleiter
-        </h2>
-
-        <p id="adminMessage">
-            Keine neue Nachricht.
-        </p>
-
-    </div>
-
-</section>
+    </main>
 
 
+    <!-- Firebase -->
+    <script
+        type="module"
+        src="firebase.js"
+    ></script>
 
-<!-- =========================================
-     WARTEN
-     ========================================= -->
-
-<section
-    id="waitingScreen"
-    class="screen"
->
-
-    <div class="card hero-card">
-
-        <div class="big-icon">
-            ⏳
-        </div>
-
-        <h1>
-            Geschafft!
-        </h1>
-
-        <p>
-            Eure Antwort wurde an den
-            Spielleiter gesendet.
-        </p>
-
-        <p>
-            Wartet auf den nächsten Hinweis.
-        </p>
-
-    </div>
-
-</section>
-
-
-
-<!-- =========================================
-     ENDE
-     ========================================= -->
-
-<section
-    id="finishScreen"
-    class="screen"
->
-
-    <div class="card hero-card">
-
-        <div class="big-icon">
-            🏆
-        </div>
-
-        <h1>
-            MISSION ERFÜLLT!
-        </h1>
-
-        <p>
-            Ihr habt den Fall gelöst!
-        </p>
-
-    </div>
-
-</section>
-
-
-</main>
-
-
-
-<!-- =========================================
-     ADMIN BUTTON
-     ========================================= -->
-
-<div class="admin-access">
-
-    <button
-        type="button"
-        onclick="openAdmin()"
-    >
-        ⚙️ Spielleiter
-    </button>
-
-</div>
-
-
-
-<footer>
-    🕵️ Detektiv-Jagd
-</footer>
-
-
-
-<script>
-
-function openAdmin() {
-
-    window.location.href =
-        "admin.html";
-
-}
-
-</script>
-
-
-<script
-    type="module"
-    src="firebase.js"
-></script>
-
-<script
-    type="module"
-    src="app.js"
-></script>
-
+    <!-- Hauptprogramm -->
+    <script
+        src="app.js"
+    ></script>
 
 </body>
-
 </html>
